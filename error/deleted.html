@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confession Deleted! | Celestial Trinity</title>
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
+  <link rel="stylesheet" type="text/css" href="/style.css"/>
+  <script src="https://kit.fontawesome.com/7a40b462da.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+      <section>
+        <header class="header">
+          <div id="menu-btn" class="fas fa-bars"></div>
+          <a href="/" class="logo nav-item" id="logo">
+            <img src="/assets/1.png" width="50px" height="50px" /> Trinity
+            Confession</a>
+          <nav class="navbar" id="navbar">
+            <a href="/" class="nav-item">Home</a>
+            <a href="/feed" class="nav-item">Confessions</a>
+            <a href="/talents" class="nav-item">Talents</a>
+            <a href="/deleteconfession" class="nav-item">Delete Confession</a>
+          </nav>
+        </header>
+      </section>
+
+  <!-- Body -->
+  <div class="delete-container">
+    <h2>Your confession was deleted</h2>
+  </div>
+
+  <!-- Footer -->
+  <div class="spaaace"></div>
+      <div class="spaace"></div>
+      <section>
+        <div class="footer">
+          <p>
+            <h4>Celestial Trinity</h4>
+            <a href="https://www.instagram.com/trinity.revelation/" target="_blank"><i class="fa-brands fa-square-instagram"></i> Instagarm</a> <br>
+            <a href="https://www.facebook.com/celestialreel" target="_blank"><i class="fa-brands fa-facebook"></i> Facebook</a>
+          </p> <hr>
+          <p><b>Our Contributors</b> <br>
+            Javascript by
+            <a href="https://www.instagram.com/soilhasnoblanket/" target="_blank"><b>@soilhasnoblanket</b></a> and <a href="https://www.instagram.com/sharior13" target="_blank"><b>@Sharior13</b></a><br>
+            HTML & CSS by
+            <a href="https://www.instagram.com/trinity.revelation/" target="_blank"><b>(s)</b></a>
+          </p>
+        </div>
+      </section>
+
+  <!-- Script for sidebar -->  
+      <script>
+        let menu = document.querySelector("#menu-btn");
+        let navbar = document.querySelector(".navbar");
+
+        menu.onclick = () => {
+          menu.classList.toggle("fa-times");
+          navbar.classList.toggle("active");
+        };
+
+        window.onscroll = () => {
+          menu.classList.remove("fa-times");
+          navbar.classList.remove("active");
+        };
+      </script>
+
+</body>
+</html>
