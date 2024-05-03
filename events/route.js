@@ -105,7 +105,7 @@ app.get("/feed", (req, res) => {
   });
 });
 
-app.get("/panel/cred123456/admin", (req, res) => {
+app.get("/panel/saurav6bajeaaula/admin", (req, res) => {
   Confession.find()
    .then((confessions) => {
       res.render("admin", { 
