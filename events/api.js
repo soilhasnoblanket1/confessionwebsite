@@ -148,7 +148,7 @@ app.post("/delete/:id", async (req, res) => {
       return res.status(404).json({ message: "Confession not found" });
     }
 
-    res.redirect("/panel/cred123456/admin");
+    res.redirect("/panel/saurav6bajeaaula/admin");
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server Error" });
