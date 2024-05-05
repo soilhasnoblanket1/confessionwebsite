@@ -3,8 +3,9 @@ const express = require("express");
 const app = express.Router();
 const path = require("path");
 const mongoose = require("mongoose");
+const crypto = require("crypto");
+
 const Confession = require("../models/confession.js");
-const { myUsername, myPassword } = process.env;
 const https = require("https");
 
 const rateLimit = {};
@@ -81,27 +82,61 @@ app.post("/submit", rateLimitMiddleware, (req, res) => {
   request.write(formData);
   request.end();
 });
-
 app.get("/submitted", (req, res) => {
   // Retrieve the confession data from the query string
   const confession = JSON.parse(decodeURIComponent(req.query.confession));
 
-  res.render("submission", { confession: confession }); // Render the submitted template with the confession data
+  // Generate an encrypted confession code
+  const encryptedConfessionCode = encryptConfessionCode(confession._id);
+
+  res.render("submission", { confession: confession, encryptedConfessionCode }); // Render the submitted template with the confession data and encrypted confession code
 });
 
+function encryptConfessionCode(confessionId) {
+  const cipher = crypto.createCipher("aes-256-cbc", process.env.SECRET_KEY);
+  let encrypted = cipher.update(confessionId.toString(), "utf8", "hex");
+  encrypted += cipher.final("hex");
+  return encrypted;
+}
+
+//...
+
 app.post("/deleteconf", (req, res) => {
-  const confessionId = req.body.objectId; // Get the confession ID from the URL parameter
+  const encryptedConfessionId = req.body.objectId; // Get the encrypted confession ID from the request body
+
+  // Decrypt the confession ID
+  const confessionId = decryptConfessionCode(encryptedConfessionId);
+
+  // Log the confessionId value
+  console.log("Confession ID:", confessionId);
 
   // Find and delete the confession by ID
   Confession.findByIdAndDelete(confessionId)
-   .then(() => {
+  .then(() => {
       res.redirect("/static/deleted");
     })
-   .catch((err) => {
+  .catch((err) => {
       console.error(err);
       res.redirect("/static/err400");
     });
 });
+//...
+
+function decryptConfessionCode(encryptedId) {
+  const decipher = crypto.createDecipher("aes-256-cbc", process.env.SECRET_KEY);
+  let decrypted = "";
+
+  try {
+    decrypted = decipher.update(encryptedId, "hex", "utf8");
+    decrypted += decipher.final("utf8");
+  } catch (err) {
+    console.error("Decryption error:", err);
+    return null;
+  }
+
+  return decrypted;
+}
+
 app.post("/delete/:id", async (req, res) => {
   try {
     const confessionId = req.params.id;
@@ -113,7 +148,7 @@ app.post("/delete/:id", async (req, res) => {
       return res.status(404).json({ message: "Confession not found" });
     }
 
-    res.redirect("/panel/saurav6bajeaaula/admin");
+    res.redirect("/panel/cred123456/admin");
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server Error" });
