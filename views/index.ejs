@@ -61,20 +61,20 @@
           <div class="g-recaptcha" data-sitekey="6Lctj88pAAAAAERQIw9_Ff7WY2NwCTda5UZEVfCv" style="display: flex; justify-content: center;"></div>
           <button class="button" type="submit" id="submit-btn">Submit</button>
       </form>
-    </div>
+    </div><br>
 <!-- Last 3 Confessions -->
-<div class="last-confessions-container">
-  <h1 style="text-align: center;">Last Confessions</h1>
+<div class="container text-center container-last">
+  <h1>Latest Confessions</h1>
   <ul>
     <% confessions.slice(-3).reverse().forEach(confession => { %>
       <li class="last-confession-card">
-        <p> <%= confession.confession %></p>
+        <h6> <%= confession.confession %></h6>
         <br>
-        <p class="feed-ct"><%= formatTimeDifference(confession.createdAt) %></p>
+        <p><%= formatTimeDifference(confession.createdAt) %></p>
       </li>
     <% }); %>
   </ul>
-  <button class="read-more-btn" onclick="location.href='/feed'">Read More</button>
+  <button class="read-more-btn" onclick="location.href='/feed'">Read More</button><br>
 </div>
 
   <!-- Easter egg from doil -->

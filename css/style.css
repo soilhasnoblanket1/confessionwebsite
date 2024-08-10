@@ -107,6 +107,61 @@ a{
 .container-index a:hover{
 color:#FFFFFF;
 }
+.container-last{
+  background-color:#FFF8DC;
+  color:#000000;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.last-confession-card {
+  background-color: #f0f0f0;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.3s;
+  word-wrap: break-word;
+  animation: fadeIn 0.5s ease-in-out;
+  background-color: var(--card-bg-color);
+  color: var(--card-text-color);
+  list-style-type: none;
+}
+
+.last-confession-card:nth-child(1) {
+  --card-bg-color: #9c27b0; 
+  --card-text-color: #FFFFFF; 
+}
+
+.last-confession-card:nth-child(2) {
+  --card-bg-color: #a25bc0; 
+  --card-text-color: #F7F7F7;
+}
+
+.last-confession-card:nth-child(3) {
+  --card-bg-color: #c68ae5; 
+  --card-text-color: #000000; 
+}
+.last-confession-card h6{
+  font-size: 1.4rem;
+  font-weight: normal;
+}
+.last-confession-card p{
+  font-size: 1rem;
+  color:#e9e7e7;
+}
+.read-more-btn {
+  background-color: #4CAF50;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.read-more-btn:hover {
+  background-color: #3e8e41;
+}
 .button{
     font-size: large;
     height:50px;
@@ -176,80 +231,6 @@ background:#5D3FD3;
   word-wrap: break-word;
   animation: fadeIn 0.5s ease-in-out;
 }
-.last-confessions-container {
-  background-color: #f0f0f0;
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
-  padding: 20px;
-  width: 70%;
-  margin: 40px auto;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: relative;
-}
-
-.last-confession-card {
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
-  padding: 10px;
-  margin: 10px;
-  display: inline-block;
-  width: calc(33.33% - 60px);
-  vertical-align: top;
-}
-
-.last-confession-card:nth-child(1) {
-  --card-bg-color: #7A288A; 
-  --card-text-color: #FFFFFF; 
-}
-
-.last-confession-card:nth-child(2) {
-  --card-bg-color: #8E44AD; 
-  --card-text-color: #F7F7F7;
-}
-
-.last-confession-card:nth-child(3) {
-  --card-bg-color: #da9efa; 
-  --card-text-color: black; 
-}
-
-.last-confession-card {
-  background-color: var(--card-bg-color);
-  color: var(--card-text-color);
-}
-.last-confession-card p {
-  font-size: 1.1em; /* increased font size */
-  word-wrap: break-word;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-height: 100px;
-}
-
-.read-more-btn {
-  background-color: #4CAF50;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  position: absolute;
-  bottom: 20px;
-  right: 20px; 
-}
-
-.read-more-btn:hover {
-  background-color: #3e8e41;
-}
-
-@media only screen and (max-width: 768px) {
-  .last-confessions-container {
-    width: 90%; 
-    margin: 20px auto; 
-  }
-  .last-confession-card {
-    width: calc(50% - 30px); 
-  }
-}
-
 .confession-card:hover {
   background-color: #e0e0e0;
 }
