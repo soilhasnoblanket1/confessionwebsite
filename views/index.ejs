@@ -62,21 +62,20 @@
           <button class="button" type="submit" id="submit-btn">Submit</button>
       </form>
     </div>
-
-    <!-- Last 3 Confessions -->
-    <div class="feed-container">
-      <h1>Last 3 Confessions</h1>
-      <ul>
-        <% confessions.slice(-3).reverse().forEach(confession => { %>
-          <li class="last-confession-card">
-            <p> <%= confession.confession %></p>
-            <br>
-            <p class="feed-ct"><%= formatTimeDifference(confession.createdAt) %></p>
-          </li>
-        <% }); %>
-      </ul>
-    </div>
-  </section>
+<!-- Last 3 Confessions -->
+<div class="last-confessions-container">
+  <h1 style="text-align: center;">Last Confessions</h1>
+  <ul>
+    <% confessions.slice(-3).reverse().forEach(confession => { %>
+      <li class="last-confession-card">
+        <p> <%= confession.confession %></p>
+        <br>
+        <p class="feed-ct"><%= formatTimeDifference(confession.createdAt) %></p>
+      </li>
+    <% }); %>
+  </ul>
+  <button class="read-more-btn" onclick="location.href='/feed'">Read More</button>
+</div>
 
   <!-- Easter egg from doil -->
   <section>
