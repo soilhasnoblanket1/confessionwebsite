@@ -64,10 +64,10 @@
     </div>
 
     <!-- Last 3 Confessions -->
-    <div class="last-confessions">
-      <h2>Recent Confessions</h2>
+    <div class="feed-container">
+      <h1>Last 3 Confessions</h1>
       <ul>
-        <% last3Confessions.forEach(confession => { %>
+        <% confessions.slice().reverse().forEach(confession => { %>
           <li class="confession-card">
             <p> <%= confession.confession %></p>
             <br>
