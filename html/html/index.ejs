@@ -48,8 +48,8 @@
 
 <!-- Body -->
   <section>
-  <div class="container text-center container-index">
-        <form action="/api/submit" method="post" class="m-3 p-3">
+    <div class="container text-center container-index">
+      <form action="/api/submit" method="post" class="m-3 p-3">
         <h1>Submit Your Confession</h1>
         <label for="confession">Confession (Max 500 characters):</label> <br>
         <textarea class="confession-box" id="confession" name="confession" placeholder="Send us anonymous confessions..." maxlength="500" oninput="updateCharacterCount()" required></textarea> 
@@ -60,7 +60,21 @@
         </div>
           <div class="g-recaptcha" data-sitekey="6Lctj88pAAAAAERQIw9_Ff7WY2NwCTda5UZEVfCv" style="display: flex; justify-content: center;"></div>
           <button class="button" type="submit" id="submit-btn">Submit</button>
-        </form>
+      </form>
+    </div>
+
+    <!-- Last 3 Confessions -->
+    <div class="last-confessions">
+      <h2>Recent Confessions</h2>
+      <ul>
+        <% last3Confessions.forEach(confession => { %>
+          <li class="confession-card">
+            <p> <%= confession.confession %></p>
+            <br>
+            <p class="feed-ct"><%= formatTimeDifference(confession.createdAt) %></p>
+          </li>
+        <% }); %>
+      </ul>
     </div>
   </section>
 
