@@ -68,7 +68,7 @@
       <h1>Last 3 Confessions</h1>
       <ul>
         <% confessions.slice(-3).reverse().forEach(confession => { %>
-          <li class="confession-card">
+          <li class="last-confession-card">
             <p> <%= confession.confession %></p>
             <br>
             <p class="feed-ct"><%= formatTimeDifference(confession.createdAt) %></p>
