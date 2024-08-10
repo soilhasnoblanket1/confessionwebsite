@@ -193,9 +193,11 @@ background:#5D3FD3;
   padding: 15px;
   margin: 10px;
   display: inline-block;
-  width: calc(33.33% - 60px); 
-  height: 250px; 
+  width: calc(33.33% - 60px);
+  height: 250px;
   vertical-align: top;
+  display: flex;
+  flex-direction: column;
 }
 
 .last-confession-card:nth-child(1) {
@@ -218,11 +220,11 @@ background:#5D3FD3;
   color: var(--card-text-color);
 }
 .last-confession-card p {
-  font-size: 1.1em; /* keep the increased font size */
+  font-size: 1.2em;
   word-wrap: break-word;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-height: 180px;
+  flex: 1; 
 }
 
 .read-more-btn {
