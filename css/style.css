@@ -198,18 +198,18 @@ background:#5D3FD3;
 }
 
 .last-confession-card:nth-child(1) {
-  --card-bg-color: #7A288A; /* deep plum */
-  --card-text-color: #FFFFFF; /* white */
+  --card-bg-color: #7A288A; 
+  --card-text-color: #FFFFFF; 
 }
 
 .last-confession-card:nth-child(2) {
-  --card-bg-color: #8E44AD; /* rich purple */
-  --card-text-color: #F7F7F7; /* light gray */
+  --card-bg-color: #8E44AD; 
+  --card-text-color: #F7F7F7;
 }
 
 .last-confession-card:nth-child(3) {
-  --card-bg-color: #da9efa; /* pastel purple */
-  --card-text-color: black; /* dark gray */
+  --card-bg-color: #da9efa; 
+  --card-text-color: black; 
 }
 
 .last-confession-card {
