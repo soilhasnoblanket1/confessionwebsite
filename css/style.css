@@ -227,6 +227,20 @@ background:#5D3FD3;
   flex: 1; 
 }
 
+
+.last-confession-card p:not(.feed-ct) {
+  font-size: 1.4em;
+  word-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1; /* take up available space */
+}
+
+.feed-ct {
+  margin-top: auto; /* push this element to the bottom */
+  font-size: 1.2em;
+  color: #666;
+}
 .read-more-btn {
   background-color: #4CAF50;
   color: #fff;
@@ -260,9 +274,6 @@ background:#5D3FD3;
   text-align: center;
   font-size: 4rem;
   margin: 5px;
-}
-.feed-ct{
-  font-size: 10px;
 }
 .sb{
   text-align: center;
