@@ -6,7 +6,31 @@ const Confession = require("../models/confession.js");
 const path = require("path");
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "html", "html", "index.html"));
+  Confession.find().then((confessions) => {
+
+    function formatTimeDifference(date) {
+      const now = new Date();
+      const diffMs = now - date;
+      const diffSec = Math.floor(diffMs / 1000);
+      const diffMin = Math.floor(diffSec / 60);
+      const diffHr = Math.floor(diffMin / 60);
+      const diffDay = Math.floor(diffHr / 24);
+
+      if (diffDay > 0) {
+        return `${diffDay} days ago`;
+      } else if (diffHr > 0) {
+        return `${diffHr} hours ago`;
+      } else if (diffMin > 0) {
+        return `${diffMin} minutes ago`;
+      } else {
+        return `a few seconds ago`;
+      }
+    }
+    res.render("index", {
+      confessions: confessions,
+      formatTimeDifference,
+    });
+  });
 });
 
 app.get("/sabal", (req, res) => {
