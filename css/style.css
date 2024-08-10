@@ -190,10 +190,11 @@ background:#5D3FD3;
 .last-confession-card {
   border: 1px solid #e0e0e0;
   border-radius: 10px;
-  padding: 10px;
+  padding: 15px;
   margin: 10px;
   display: inline-block;
-  width: calc(33.33% - 60px);
+  width: calc(33.33% - 60px); 
+  height: 250px; 
   vertical-align: top;
 }
 
@@ -217,11 +218,11 @@ background:#5D3FD3;
   color: var(--card-text-color);
 }
 .last-confession-card p {
-  font-size: 1.4em; /* increased font size */
+  font-size: 1.1em; /* keep the increased font size */
   word-wrap: break-word;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-height: 100px;
+  max-height: 180px;
 }
 
 .read-more-btn {
