@@ -1,1 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send us anonymous confessions! | Celestial Trinity</title>
+    <link rel="icon" href="/assets/favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <script src="https://kit.fontawesome.com/7a40b462da.js" crossorigin="anonymous"></script>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
 
+<!-- Navigation Bar -->
+  <section>
+    <header class="header">
+      <div id="menu-btn" class="fas fa-bars"></div>
+      <a href="/" class="logo nav-item" id="logo">
+        <img src="/assets/1.png" width="50px" height="50px" /> Trinity
+        Confession</a>
+      <nav class="navbar" id="navbar">
+        <a href="/" class="nav-item">Home</a>
+        <a href="/feed" class="nav-item">Confessions</a>
+        <a href="/deleteconfession" class="nav-item">Delete Confession</a>
+      </nav>
+    </header>
+    
+<!-- Script for sidebar -->  
+    <script>
+      let menu = document.querySelector("#menu-btn");
+      let navbar = document.querySelector(".navbar");
+
+      menu.onclick = () => {
+        menu.classList.toggle("fa-times");
+        navbar.classList.toggle("active");
+      };
+
+      window.onscroll = () => {
+        menu.classList.remove("fa-times");
+        navbar.classList.remove("active");
+      };
+
+      
+    </script>
+  </section>
+
+<!-- Body -->
+  <section>
+    <div class="container text-center container-index">
+      <form action="/api/submit" method="post" class="m-3 p-3">
+        <h1>Submit Your Confession</h1>
+        <label for="confession">Confession (Max 500 characters):</label> <br>
+        <textarea class="confession-box" id="confession" name="confession" placeholder="Send us anonymous confessions..." maxlength="500" oninput="updateCharacterCount()" required></textarea> 
+        <div id="characterCount"><p>Characters remaining: 500</p></div>
+        <div>
+          <input class="index-cb" type="checkbox" id="terms" name="terms" required checked>
+          <label for="terms">I have read and agree to the <u><a href="/static/tos" target="_blank">terms and services</a></u></label>
+        </div>
+          <div class="g-recaptcha" data-sitekey="6Lctj88pAAAAAERQIw9_Ff7WY2NwCTda5UZEVfCv" style="display: flex; justify-content: center;"></div>
+          <button class="button" type="submit" id="submit-btn">Submit</button>
+      </form>
+    </div>
+
+    <!-- Last 3 Confessions -->
+    <div class="feed-container">
+      <h1>Last 3 Confessions</h1>
+      <ul>
+        <% confessions.slice().reverse().forEach(confession => { %>
+          <li class="confession-card">
+            <p> <%= confession.confession %></p>
+            <br>
+            <p class="feed-ct"><%= formatTimeDifference(confession.createdAt) %></p>
+          </li>
+        <% }); %>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Easter egg from doil -->
+  <section>
+  <button style="color:#FFFFFF;
+    background:#ff0000;" id="playsound">💣Donot Click here💥</button>
+  <audio id="sound" src="/assets/americaya.mp3"></audio>
+  </section>
+  
+  <!-- Footer -->
+  <div class="spaace"></div>
+  <section>
+    <div class="footer">
+      <p>
+        <h4>Celestial Trinity</h4>
+        <a href="https://www.instagram.com/trinity.revelation/" target="_blank"><i class="fa-brands fa-square-instagram"></i> Instagarm</a> <br>
+        <a href="https://www.facebook.com/celestialreel" target="_blank"><i class="fa-brands fa-facebook"></i> Facebook</a>
+      </p> <hr>
+      <p><b>Our Contributors</b> <br>
+        Javascript by
+        <a href="https://www.instagram.com/soilhasnoblanket" target="_blank"><b>@soilhasnoblanket</b></a> and <a href="https://www.instagram.com/sharior13" target="_blank"><b>@Sharior13</b></a><br>
+        HTML & CSS by
+        <a href="https://www.instagram.com/trinity.revelation/" target="_blank"><b>(s)</b></a>
+      </p>
+    </div>
+  </section>
+
+  <script>
+      function updateCharacterCount() {
+          const textArea = document.getElementById('confession');
+          const maxLength = 500;
+          const remaining = maxLength - textArea.value.length;
+          document.getElementById('characterCount').textContent = `Characters remaining: ${remaining}`;
+      }
+    const playButton = document.getElementById('playsound');
+    const soundEffect = document.getElementById('sound');
+    playButton.addEventListener('click', () => {
+        soundEffect.play();
+    });
+  </script>
+  
+</body>
+</html>
