@@ -67,7 +67,7 @@
     <div class="feed-container">
       <h1>Last 3 Confessions</h1>
       <ul>
-        <% confessions.slice().reverse().forEach(confession => { %>
+        <% confessions.slice(-3).reverse().forEach(confession => { %>
           <li class="confession-card">
             <p> <%= confession.confession %></p>
             <br>
