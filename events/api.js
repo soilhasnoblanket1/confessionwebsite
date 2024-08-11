@@ -123,7 +123,7 @@ app.post("/deleteconf", (req, res) => {
 //...
 
 function decryptConfessionCode(encryptedId) {
-  const decipher = crypto.createDecipher("aes-256-cbc", "sauravchan");
+  const decipher = crypto.createDecipher("aes-256-cbc", process.env.SECRET_KEY);
   let decrypted = "";
 
   try {
