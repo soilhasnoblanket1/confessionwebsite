@@ -123,7 +123,7 @@ app.post("/deleteconf", (req, res) => {
 //...
 
 function decryptConfessionCode(encryptedId) {
-  const decipher = crypto.createDecipher("aes-256-cbc", process.env.SECRET_KEY);
+  const decipher = crypto.createDecipher("aes-256-cbc", "sauravchan");
   let decrypted = "";
 
   try {
@@ -148,7 +148,7 @@ app.post("/delete/:id", async (req, res) => {
       return res.status(404).json({ message: "Confession not found" });
     }
 
-    res.redirect("/panel/saurav6bajeaaula/admin");
+    res.redirect("/bin/cementglazeddoughnuts/adminpanel");
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server Error" });
