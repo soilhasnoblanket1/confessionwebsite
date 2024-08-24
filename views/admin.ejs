@@ -27,31 +27,30 @@
     </header>
   </section>
 
-<!-- Body -->
-<section>
-  <div class="feed-container">
-    <h1>Admin Page</h1>
-    <div class="sb">
-      <input type="text" id="search-box" class="search-box" placeholder="Search confessions...">
+  <section>
+    <div class="feed-container">
+      <h1>Admin Page</h1>
+      <div class="sb">
+        <input type="text" id="search-box" class="search-box" placeholder="Search confessions...">
+      </div>
+      <ul id="confession-list">
+        <% confessions.slice().reverse().forEach((confession, index) => { %>
+        <li class="confession-card" onclick="copyConfessionText(event)">
+          <p>#<%= confessions.length - index %></p>
+          <p> <%= confession.confession %></p>
+          <p class="feed-ct"><%= formatTimeDifference(confession.createdAt) %></p>
+          <div class="ad-objectcode">
+            <span><strong>Confession Code:</strong> <%= confession._id %></span> <br> 
+            <form method="POST" action="/api/delete/<%= confession._id %>">
+              <button type="submit" style="font-size: 16px; height: 30px; width: 80px; color: #FFFFFF; background: #9c57b0; border: none; cursor: pointer;" onclick="return confirm('Are you sure you want to delete this confession?')">Delete</button>
+            </form>
+          </div>
+        </li>
+        <% }); %>
+      </ul>
     </div>
-    <ul id="confession-list">
-      <% confessions.slice().reverse().forEach((confession, index) => { %>
-      <li class="confession-card" onclick="copyConfessionText(event)">
-<p style="font-weight: bold; font-family: Arial, sans-serif; font-size: 12px; border-radius: 10px;">#<%= confessions.length - index %></p>
-        <p> <%= confession.confession %></p>
-        <p class="feed-ct"><%= formatTimeDifference(confession.createdAt) %></p>
-        <div class="ad-objectcode">
-          <span><strong>Object Code:</strong> <%= confession._id %></span> <br> 
-          <form method="POST" action="/api/delete/<%= confession._id %>">
-         <button type="submit" class="delete-button" onclick="return confirm('Are you sure you want to delete this confession?')">Delete</button>
-          </form>
-        </div>
-      </li>
-      <% }); %>
-    </ul>
-  </div>
-  <div class="copy-overlay" id="overlay">Copied to Clipboard</div>
-</section>
+    <div class="copy-overlay" id="overlay">Copied to Clipboard</div>
+  </section>
 
         
 <!-- Footer -->
@@ -87,7 +86,7 @@
 <!-- Script for copytoclipboard -->
 <script>
   function copyConfessionText(event) {
-    const confessionText = event.currentTarget.firstElementChild.innerText;
+    const confessionText = event.currentTarget.querySelector('p:nth-child(2)').innerText;
     navigator.clipboard.writeText(confessionText)
      .then(() => {
         document.getElementById('overlay').style.display = 'block';
