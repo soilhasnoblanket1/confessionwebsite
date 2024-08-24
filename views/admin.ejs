@@ -37,6 +37,7 @@
     <ul id="confession-list">
       <% confessions.slice().reverse().forEach((confession, index) => { %>
       <li class="confession-card" onclick="copyConfessionText(event)">
+<p style="font-weight: bold; font-family: Arial, sans-serif; font-size: 12px; border-radius: 10px;">#<%= confessions.length - index %></p>
         <p> <%= confession.confession %></p>
         <p class="feed-ct"><%= formatTimeDifference(confession.createdAt) %></p>
         <div class="ad-objectcode">
