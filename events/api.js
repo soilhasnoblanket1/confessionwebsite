@@ -9,8 +9,8 @@ const Confession = require("../models/confession.js");
 const https = require("https");
 
 const rateLimit = {};
-const maxRequestsPerHour = 6;
-const vpnDetectionApiKey = "YOUR_API_KEY_HERE"; // Replace with your API key
+const maxRequestsPerHour = 5;
+const vpnDetectionApiKey = "9700a80a63c3490a813371c58034ad7f"; // Replace with your API key
 
 function rateLimitMiddleware(req, res, next) {
   const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
