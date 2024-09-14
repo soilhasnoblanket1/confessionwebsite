@@ -14,16 +14,24 @@ function rateLimitMiddleware(req, res, next) {
   const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
 
   if (!rateLimit[ip]) {
-    rateLimit[ip] = Date.now();
+    rateLimit[ip] = {
+      timestamp: Date.now(),
+      count: 1,
+    };
     return next();
   }
 
-  const timeDifference = Date.now() - rateLimit[ip];
-  if (timeDifference < 90000) {
-    return res.redirect("/static/err401");
+  const timeDifference = Date.now() - rateLimit[ip].timestamp;
+  if (timeDifference < 3600000) { // 1 hour in milliseconds
+    if (rateLimit[ip].count >= 5) {
+      return res.redirect("/static/err401");
+    }
+    rateLimit[ip].count++;
+  } else {
+    rateLimit[ip].timestamp = Date.now();
+    rateLimit[ip].count = 1;
   }
 
-  rateLimit[ip] = Date.now();
   next();
 }
 
