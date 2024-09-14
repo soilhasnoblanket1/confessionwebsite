@@ -19,7 +19,7 @@ function rateLimitMiddleware(req, res, next) {
   }
 
   const timeDifference = Date.now() - rateLimit[ip];
-  if (timeDifference < 30000) {
+  if (timeDifference < 90000) {
     return res.redirect("/static/err401");
   }
 
