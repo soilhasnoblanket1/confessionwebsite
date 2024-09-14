@@ -18,7 +18,7 @@ function rateLimitMiddleware(req, res, next) {
   const language = req.headers["accept-language"];
 
   // Check if the IP address is a known VPN or proxy
-  const vpnDetectionUrl = `https://api.vpnapi.io/api/v1/${ip}?key=${vpnDetectionApiKey}`;
+  const vpnDetectionUrl = `https://vpnapi.io/api/${ip}?key=${vpnDetectionApiKey}`;
   const vpnDetectionOptions = {
     method: "GET",
     headers: {
