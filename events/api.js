@@ -9,54 +9,22 @@ const Confession = require("../models/confession.js");
 const https = require("https");
 
 const rateLimit = {};
-const maxRequestsPerHour = 5;
-const vpnDetectionApiKey = "9700a80a63c3490a813371c58034ad7f"; // Replace with your API key
 
 function rateLimitMiddleware(req, res, next) {
   const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
-  const userAgent = req.headers["user-agent"];
-  const language = req.headers["accept-language"];
 
-  // Check if the IP address is a known VPN or proxy
-  const vpnDetectionUrl = `https://vpnapi.io/api/${ip}?key=${vpnDetectionApiKey}`;
-  const vpnDetectionOptions = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
+  if (!rateLimit[ip]) {
+    rateLimit[ip] = Date.now();
+    return next();
+  }
 
-  https.get(vpnDetectionUrl, vpnDetectionOptions, (response) => {
-    let data = "";
-    response.on("data", (chunk) => {
-      data += chunk;
-    });
-    response.on("end", () => {
-      const vpnDetectionResponse = JSON.parse(data);
-      if (vpnDetectionResponse.status === "success" && vpnDetectionResponse.data.vpn === true) {
-        // Block the request if it's coming from a VPN or proxy
-        return res.status(403).json({ error: "Access denied" });
-      }
+  const timeDifference = Date.now() - rateLimit[ip];
+  if (timeDifference < 90000) {
+    return res.redirect("/static/err401");
+  }
 
-      // Proceed with rate limiting
-      if (!rateLimit[ip]) {
-        rateLimit[ip] = { timestamp: Date.now(), count: 0 };
-      }
-
-      const timeDifference = Date.now() - rateLimit[ip].timestamp;
-      if (timeDifference < 3600000) { // 1 hour
-        if (rateLimit[ip].count >= maxRequestsPerHour) {
-          return res.redirect("/static/err401");
-        }
-        rateLimit[ip].count++;
-      } else {
-        rateLimit[ip].timestamp = Date.now();
-        rateLimit[ip].count = 1;
-      }
-
-      next();
-    });
-  });
+  rateLimit[ip] = Date.now();
+  next();
 }
 
 app.post("/submit", rateLimitMiddleware, (req, res) => {
