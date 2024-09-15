@@ -7,7 +7,6 @@ const Comment = require("../models/comment.model");
 const path = require("path");
 const rateLimitMiddleware = require('./api.js');
 
-app.use(rateLimitMiddleware);
 
 app.get("/", (req, res, next) => {
   if (req.vpnDetected === true) {
