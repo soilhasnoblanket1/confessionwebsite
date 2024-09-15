@@ -146,18 +146,19 @@ function encryptConfessionCode(confessionId) {
   return encrypted;
 }
 
-app.get('/rate-limit', (req, res) => {
+app.get('/rate-limit', async (req, res) => {
   const ipAddress = req.ip;
-  RateLimit.findOne({ ip: ipAddress }, (err, doc) => {
-    if (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Internal Server Error' });
-    } else if (!doc) {
+  try {
+    const doc = await RateLimit.findOne({ ip: ipAddress });
+    if (!doc) {
       res.json({ count: 0, timestamp: Date.now() });
     } else {
       res.json({ count: doc.count, timestamp: doc.timestamp });
     }
-  });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 //...
