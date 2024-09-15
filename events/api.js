@@ -20,9 +20,10 @@ async function rateLimitMiddleware(req, res, next) {
 
     if (vpnData.security.vpn === true) {
       req.vpnDetected = true; // Set the req.vpnDetected property to true
+      return res.redirect('/static/vpnblock'):
       console.log(`VPN detected for IP ${ipAddress}`);
     } else {
-      req.vpnDetected = false; // Set the req.vpnDetected property to false
+      req.vpnDetected = false; 
     }
 
     // Find the RateLimit document for the IP address
