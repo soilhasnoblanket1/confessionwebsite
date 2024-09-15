@@ -20,8 +20,8 @@ async function rateLimitMiddleware(req, res, next) {
     const vpnData = vpnCheckResponse.data;
 
     if (vpnData.security.vpn === true) {
-      console.log(`VPN detected for IP ${ipAddress}. Redirecting to /static/err403`);
-      return res.status(401).json({ error: "Abhisekhhh.. VPN is blocked..." });
+      console.log(`VPN detected for IP ${ipAddress}. Redirecting to /static/vpnblock`);
+      return res.redirect("/static/vpnblock");
     }
 
     // Find the RateLimit document for the IP address
