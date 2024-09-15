@@ -34,9 +34,11 @@ app.get("/", (req, res, next) => {
         return `a few seconds ago`;
       }
     }
+    const ipAddress = req.ip;
     res.render("index", {
       confessions: confessions,
       formatTimeDifference,
+      ipAddress, 
     });
   });
 });
