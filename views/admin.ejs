@@ -41,7 +41,7 @@
           <p class="feed-ct"><%= formatTimeDifference(confession.createdAt) %></p>
           <div class="ad-objectcode">
             <span><strong>Confession Code:</strong> <%= confession._id %></span> <br> 
-<span><strong>IP Address:</strong> <%= confession.ipaddress %></span> <br>
+<span><strong>IP Address:</strong> <%= confession.ip %></span> <br>
             <form method="POST" action="/api/delete/<%= confession._id %>">
               <button type="submit" style="font-size: 16px; height: 30px; width: 80px; color: #FFFFFF; background: #9c57b0; border: none; cursor: pointer;" onclick="return confirm('Are you sure you want to delete this confession?')">Delete</button>
             </form>
