@@ -38,7 +38,7 @@ app.get("/", (req, res, next) => {
     res.render("index", {
       confessions: confessions,
       formatTimeDifference,
-      ip: ipAddress, 
+      ipAddress: ipAddress, 
     });
   });
 });
