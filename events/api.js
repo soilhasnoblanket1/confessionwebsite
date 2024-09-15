@@ -146,6 +146,20 @@ function encryptConfessionCode(confessionId) {
   return encrypted;
 }
 
+app.get('/rate-limit', (req, res) => {
+  const ipAddress = req.ip;
+  RateLimit.findOne({ ip: ipAddress }, (err, doc) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else if (!doc) {
+      res.json({ count: 0, timestamp: Date.now() });
+    } else {
+      res.json({ count: doc.count, timestamp: doc.timestamp });
+    }
+  });
+});
+
 //...
 
 app.post("/deleteconf", (req, res) => {
