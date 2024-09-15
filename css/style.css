@@ -693,3 +693,74 @@ html {
   color:#e9e7e7;
 }
 }
+
+.comment-section {
+  padding: 20px;
+}
+
+.comment {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 10px;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.comment-bubble {
+  background-color: #f2f3f5;
+  border-radius: 10px;
+  padding: 10px;
+  position: relative;
+}
+
+.comment-bubble::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -10px;
+  border-width: 10px 10px 0 0;
+  border-style: solid;
+  border-color: #f2f3f5 transparent transparent transparent;
+}
+
+.username {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.text {
+  margin-bottom: 10px;
+}
+}
+
+.comment-bubble::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -10px;
+  border-width: 10px 10px 0 0;
+  border-style: solid;
+  border-color: #f2f3f5 transparent transparent transparent;
+}
+
+.username {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.text {
+  margin-bottom: 10px;
+}
