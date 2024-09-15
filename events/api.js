@@ -10,19 +10,19 @@ const RateLimit = require("../models/limit.js");
 const https = require("https");
 
 async function rateLimitMiddleware(req, res, next) {
-  const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+  const ipAddress = req.headers["x-forwarded-for"].split(',')[0].trim() || req.connection.remoteAddress;
 
   try {
     // Find the RateLimit document for the IP address
-    const doc = await RateLimit.findOne({ ip }).exec();
+    const doc = await RateLimit.findOne({ ip: ipAddress }).exec();
 
-    console.log(`Rate limit check for IP ${ip}:`);
+    console.log(`Rate limit check for IP ${ipAddress}:`);
 
     if (!doc) {
       // Create a new RateLimit document if one doesn't exist
-      const newDoc = new RateLimit({ ip, count: 0, timestamp: Date.now() });
+      const newDoc = new RateLimit({ ip: ipAddress, count: 0, timestamp: Date.now() });
       await newDoc.save();
-      console.log(`Created new RateLimit document for IP ${ip}`);
+      console.log(`Created new RateLimit document for IP ${ipAddress}`);
       return next();
     } else {
       // Update the RateLimit document
@@ -32,17 +32,17 @@ async function rateLimitMiddleware(req, res, next) {
       if (timeDifference >= 3600000) { // 1 hour in milliseconds
         doc.count = 0;
         doc.timestamp = currentTime;
-        console.log(`Reset rate limit for IP ${ip} after 1 hour`);
+        console.log(`Reset rate limit for IP ${ipAddress} after 1 hour`);
       }
 
       if (doc.count >= 5) {
-        console.log(`Rate limit exceeded for IP ${ip}. Redirecting to /static/err401`);
+        console.log(`Rate limit exceeded for IP ${ipAddress}. Redirecting to /static/err401`);
         return res.redirect("/static/err401");
       }
 
       doc.count++;
       await doc.save();
-      console.log(`Updated rate limit for IP ${ip}. Count: ${doc.count}`);
+      console.log(`Updated rate limit for IP ${ipAddress}. Count: ${doc.count}`);
       return next();
     }
   } catch (err) {
