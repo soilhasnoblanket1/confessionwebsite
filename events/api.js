@@ -13,6 +13,16 @@ async function rateLimitMiddleware(req, res, next) {
   const ipAddress = req.headers["x-forwarded-for"].split(',')[0].trim() || req.connection.remoteAddress;
 
   try {
+    // Check if the IP address is associated with a VPN using vpnai.io
+    const vpnCheckUrl = `https://vpnapi.io/api/${ipAddress}?key=9700a80a63c3490a813371c58034ad7f`;
+    const vpnCheckResponse = await axios.get(vpnCheckUrl);
+    const vpnData = vpnCheckResponse.data;
+
+    if (vpnData.vpn === true) {
+      console.log(`VPN detected for IP ${ipAddress}. Redirecting to /static/err403`);
+      return res.redirect("/static/err403");
+    }
+
     // Find the RateLimit document for the IP address
     const doc = await RateLimit.findOne({ ip: ipAddress }).exec();
 
