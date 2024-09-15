@@ -9,6 +9,10 @@ const Confession = mongoose.model("Confession", {
     type: Date,
     default: Date.now,
   },
+  ip: {
+  type: String,
+    required: true,
+  },
 });
 
 module.exports = Confession;
