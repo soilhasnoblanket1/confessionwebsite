@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const app = express();
 const Confession = require("../models/confession.js");
+const Comment = require("../models/comment.model");
 const path = require("path");
 const rateLimitMiddleware = require('./api.js');
 
@@ -115,7 +116,7 @@ function formatTimeDifference(createdAt) {
 
 app.get('/api/confessions', async (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  const limit = 10; // number of confessions per page
+  const limit = 10;
 
   try {
     const totalConfessions = await Confession.countDocuments();
