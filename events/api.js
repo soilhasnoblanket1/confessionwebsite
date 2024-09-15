@@ -98,7 +98,7 @@ app.post("/submit", rateLimitMiddleware, (req, res) => {
       // If the reCAPTCHA response is valid, proceed with the rest of the code
       const newConfession = new Confession({
         confession: confession,
-        ipaddress: ipAddress,
+        ip: ipAddress,
       });
 
       newConfession
