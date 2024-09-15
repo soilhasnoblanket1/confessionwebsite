@@ -7,9 +7,9 @@ const path = require("path");
 const rateLimitMiddleware = require('./api.js');
 
 app.get("/", rateLimitMiddleware, (req, res, next) => {
-  if (req.vpnDetected) {
+  if (req.vpnDetected === true) {
     console.log(`VPN detected for IP ${req.ip}. Redirecting to /static/err403`);
-    return res.status(401).redirect("/static/vpnblock");
+    return res.status(401).redirect("/static/err403");
   }
 
   Confession.find().then((confessions) => {
