@@ -15,23 +15,25 @@ function rateLimitMiddleware(req, res, next) {
 
   if (!rateLimit[ip]) {
     rateLimit[ip] = {
+      count: 0,
       timestamp: Date.now(),
-      count: 1,
     };
     return next();
   }
 
-  const timeDifference = Date.now() - rateLimit[ip].timestamp;
-  if (timeDifference < 3600000) { // 1 hour in milliseconds
-    if (rateLimit[ip].count >= 5) {
-      return res.redirect("/static/err401");
-    }
-    rateLimit[ip].count++;
-  } else {
-    rateLimit[ip].timestamp = Date.now();
-    rateLimit[ip].count = 1;
+  const currentTime = Date.now();
+  const timeDifference = currentTime - rateLimit[ip].timestamp;
+
+  if (timeDifference >= 3600000) { // 1 hour in milliseconds
+    rateLimit[ip].count = 0;
+    rateLimit[ip].timestamp = currentTime;
   }
 
+  if (rateLimit[ip].count >= 3) {
+    return res.redirect("/static/err401");
+  }
+
+  rateLimit[ip].count++;
   next();
 }
 
