@@ -21,7 +21,7 @@
     "ws": "^8.16.0"
   },
   "scripts": {
-    "build": "npm install ejs express body-parser path mongoose serverless-http",
+    "build": "npm install ejs express body-parser path mongoose serverless-http axios",
     "start": "node app.js"
   }
 }
