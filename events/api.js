@@ -4,7 +4,7 @@ const app = express.Router();
 const path = require("path");
 const mongoose = require("mongoose");
 const crypto = require("crypto");
-const axios = require('axios'):
+const axios = require('axios');
 
 const Confession = require("../models/confession.js");
 const RateLimit = require("../models/limit.js");
