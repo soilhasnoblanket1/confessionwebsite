@@ -49,6 +49,10 @@ app.get("/static/deleted", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "error", "deleted.html"));
 });
 
+app.get("/static/vpnblock", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "error", "vpnblock.html"));
+});
+
 app.get("/static/errcaptcha", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "error", "errcaptcha.html"));
 });
