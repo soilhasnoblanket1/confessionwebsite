@@ -24,7 +24,6 @@
         <a href="/" class="nav-item">Home</a>
         <a href="/feed" class="nav-item">Confessions</a>
         <a href="/deleteconfession" class="nav-item">Delete Confession</a>
-        <span class="nav-item" id="rate-limit-info"></span>
       </nav>
     </header>
     
@@ -45,21 +44,6 @@
 
       
     </script>
-
-<script>
-    const ipAddress = '<%= ipAddress %>';
-  </script>
-
-  <!-- Script to update rate limit info -->
-  <script>
-   fetch('/rate-limit')
-  .then(response => response.text())
-  .then(html => {
-    const spanElement = document.getElementById('rate-limit-info');
-    spanElement.innerHTML = html;
-  })
-  .catch(error => console.error(error));
-  </script>
   </section>
 
 <!-- Body -->
