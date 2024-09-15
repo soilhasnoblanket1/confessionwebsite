@@ -176,7 +176,7 @@ app.get('/rate-limit', async (req, res) => {
       }
 
       if (doc.count >= 5) {
-        return res.status(401).send('<span>Rate limit exceeded. Please try again later.</span>');
+        return res.status(401).send('<span>Limit reached</span>');
       }
 
       doc.count++;
