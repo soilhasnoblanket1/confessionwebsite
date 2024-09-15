@@ -4,10 +4,15 @@ const mongoose = require("mongoose");
 const app = express();
 const Confession = require("../models/confession.js");
 const path = require("path");
+const rateLimitMiddleware = require('./api.js');
 
-app.get("/", (req, res) => {
+app.get("/", rateLimitMiddleware, (req, res, next) => {
+  if (req.vpnDetected) {
+    console.log(`VPN detected for IP ${req.ip}. Redirecting to /static/err403`);
+    return res.status(401).redirect("/static/vpnblock");
+  }
+
   Confession.find().then((confessions) => {
-
     function formatTimeDifference(date) {
       const now = new Date();
       const diffMs = now - date;
