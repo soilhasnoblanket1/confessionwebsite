@@ -6,35 +6,49 @@ const mongoose = require("mongoose");
 const crypto = require("crypto");
 
 const Confession = require("../models/confession.js");
+const RateLimit = require("../models/limit.js");
 const https = require("https");
 
-const rateLimit = {};
-
-function rateLimitMiddleware(req, res, next) {
+async function rateLimitMiddleware(req, res, next) {
   const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
 
-  if (!rateLimit[ip]) {
-    rateLimit[ip] = {
-      count: 0,
-      timestamp: Date.now(),
-    };
-    return next();
+  try {
+    // Find the RateLimit document for the IP address
+    const doc = await RateLimit.findOne({ ip }).exec();
+
+    console.log(`Rate limit check for IP ${ip}:`);
+
+    if (!doc) {
+      // Create a new RateLimit document if one doesn't exist
+      const newDoc = new RateLimit({ ip, count: 0, timestamp: Date.now() });
+      await newDoc.save();
+      console.log(`Created new RateLimit document for IP ${ip}`);
+      return next();
+    } else {
+      // Update the RateLimit document
+      const currentTime = Date.now();
+      const timeDifference = currentTime - doc.timestamp;
+
+      if (timeDifference >= 3600000) { // 1 hour in milliseconds
+        doc.count = 0;
+        doc.timestamp = currentTime;
+        console.log(`Reset rate limit for IP ${ip} after 1 hour`);
+      }
+
+      if (doc.count >= 5) {
+        console.log(`Rate limit exceeded for IP ${ip}. Redirecting to /static/err401`);
+        return res.redirect("/static/err401");
+      }
+
+      doc.count++;
+      await doc.save();
+      console.log(`Updated rate limit for IP ${ip}. Count: ${doc.count}`);
+      return next();
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
-
-  const currentTime = Date.now();
-  const timeDifference = currentTime - rateLimit[ip].timestamp;
-
-  if (timeDifference >= 3600000) { // 1 hour in milliseconds
-    rateLimit[ip].count = 0;
-    rateLimit[ip].timestamp = currentTime;
-  }
-
-  if (rateLimit[ip].count >= 3) {
-    return res.redirect("/static/err401");
-  }
-
-  rateLimit[ip].count++;
-  next();
 }
 
 app.post("/submit", rateLimitMiddleware, (req, res) => {
@@ -92,6 +106,7 @@ app.post("/submit", rateLimitMiddleware, (req, res) => {
   request.write(formData);
   request.end();
 });
+
 app.get("/submitted", (req, res) => {
   // Retrieve the confession data from the query string
   const confession = JSON.parse(decodeURIComponent(req.query.confession));
@@ -102,10 +117,17 @@ app.get("/submitted", (req, res) => {
   res.render("submission", { confession: confession, encryptedConfessionCode }); // Render the submitted template with the confession data and encrypted confession code
 });
 
+
 function encryptConfessionCode(confessionId) {
-  const cipher = crypto.createCipher("aes-256-cbc", process.env.SECRET_KEY);
-  let encrypted = cipher.update(confessionId.toString(), "utf8", "hex");
-  encrypted += cipher.final("hex");
+  const password = 'hey';
+  const salt = 'salt';
+  const key = crypto.pbkdf2Sync(password, salt, 10000, 32, 'sha512');
+  const algorithm = 'aes-256-cbc';
+  const iv = Buffer.alloc(16, 0); // fixed IV
+
+  const cipher = crypto.createCipheriv(algorithm, key, iv);
+  let encrypted = cipher.update(confessionId.toString(), 'utf8', 'hex');
+  encrypted += cipher.final('hex');
   return encrypted;
 }
 
@@ -132,18 +154,16 @@ app.post("/deleteconf", (req, res) => {
 });
 //...
 
-function decryptConfessionCode(encryptedId) {
-  const decipher = crypto.createDecipher("aes-256-cbc", process.env.SECRET_KEY);
-  let decrypted = "";
+function decryptConfessionCode(encrypted) {
+  const password = 'hey';
+  const salt = 'salt';
+  const key = crypto.pbkdf2Sync(password, salt, 10000, 32, 'sha512');
+  const algorithm = 'aes-256-cbc';
+  const iv = Buffer.alloc(16, 0); // fixed IV
 
-  try {
-    decrypted = decipher.update(encryptedId, "hex", "utf8");
-    decrypted += decipher.final("utf8");
-  } catch (err) {
-    console.error("Decryption error:", err);
-    return null;
-  }
-
+  const decipher = crypto.createDecipheriv(algorithm, key, iv);
+  let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+  decrypted += decipher.final('utf8');
   return decrypted;
 }
 
