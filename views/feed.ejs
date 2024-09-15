@@ -8,7 +8,7 @@
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
   <link rel="stylesheet" type="text/css" href="style.css" />
-  <script src="https://kit.fontawesome.com/75dd1192be.js" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/7a40b462da.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -37,16 +37,24 @@
     <% confessions.slice().reverse().forEach((confession, index) => { %>
       <li>
         <div class="confession-card">
-          <p style="font-weight: bold; font-family: Arial, sans-serif; font-size: 12px; border-radius: 10px;">#<%= confessions.length - index %></p>
+          <p style="font-weight: bold; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; font-size: 12px; border-radius: 10px;">#<%= confessions.length - index %></p>
           <p><%= confession.confession %></p>
-          <br>
-          <p class="feed-ct"><%= formatTimeDifference(confession.createdAt) %></p>
-        </div>
-      </li>
+          <p style="color: #666; font-size: 12px;">Posted <%= formatTimeDifference(confession.createdAt) %></p>
+          <% if (confession.comments.length > 0) { %>
+            <a href="/confession/<%= confession._id %>">
+              <img src="https://img.icons8.com/material-outlined/24/000000/speech-bubble.png" alt="Comment Icon">
+              <%= confession.comments.length %>
+            </a>
+          <% } else { %>
+            <a href="/confession/<%= confession._id %>">
+              <img src="https://img.icons8.com/material-outlined/24/000000/speech-bubble.png" alt="Comment Icon">
+              0
+            </a>
+          <% } %>
     <% }); %>
   </ul>
+  <div class="loader" id="loader">Loading...</div>
 </div>
-
 <!-- Footer -->
   <section>
     <div class="footer">
@@ -97,6 +105,41 @@
         }
       });
     });
+  </script>
+
+
+  <script>
+function loadConfessions() {
+  if (isLoading) return;
+  isLoading = true;
+
+  const page = currentPage;
+  const url = `/api/confessions?page=${page}`;
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      const confessions = data.confessions;
+
+      // Append the new confessions to the list
+      confessions.forEach(confession => {
+        const confessionHTML = `
+          <li>
+            <div class="confession-card">
+              <!-- confession content -->
+            </div>
+          </li>
+        `;
+        confessionList.innerHTML += confessionHTML;
+      });
+
+      // Update the current page number
+      currentPage++;
+
+      // Set the loading state to false
+      isLoading = false;
+    });
+}
   </script>
 </body>
 </html>
