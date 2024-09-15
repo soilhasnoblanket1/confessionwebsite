@@ -43,9 +43,16 @@ async function rateLimitMiddleware(req, res, next) {
       const timeDifference = currentTime - doc.timestamp;
 
       if (timeDifference >= 3600000) { // 1 hour in milliseconds
-        doc.count = 0;
-        doc.timestamp = currentTime;
-        console.log(`Reset rate limit for IP ${ipAddress} after 1 hour`);
+        // Check if the IP address has exceeded the rate limit in the past hour
+        const pastHourDocs = await RateLimit.find({ ip: ipAddress, timestamp: { $gte: currentTime - 3600000 } });
+        if (pastHourDocs.length >= 5) {
+          console.log(`Rate limit exceeded for IP ${ipAddress} in the past hour. Redirecting to /static/err401`);
+          return res.redirect("/static/err401");
+        } else {
+          doc.count = 0;
+          doc.timestamp = currentTime;
+          console.log(`Reset rate limit for IP ${ipAddress} after 1 hour`);
+        }
       }
 
       if (doc.count >= 5) {
