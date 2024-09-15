@@ -27,7 +27,7 @@ async function rateLimitMiddleware(req, res, next) {
     }
 
     // Find the RateLimit document for the IP address
-    const doc = await RateLimit.findOne({ ip: ipAddress, count: count }).exec();
+    const doc = await RateLimit.findOne({ ip: ipAddress }).exec();
 
     console.log(`Rate limit check for IP ${ipAddress}:`);
 
