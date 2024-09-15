@@ -19,7 +19,7 @@ async function rateLimitMiddleware(req, res, next) {
     const vpnCheckResponse = await axios.get(vpnCheckUrl);
     const vpnData = vpnCheckResponse.data;
 
-    if (vpnData.vpn === true) {
+    if (vpnData.security.vpn === true) {
       console.log(`VPN detected for IP ${ipAddress}. Redirecting to /static/err403`);
       return res.status(401).json({ error: "Abhisekhhh.. VPN is blocked..." });
     }
