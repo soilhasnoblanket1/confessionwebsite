@@ -24,6 +24,7 @@
         <a href="/" class="nav-item">Home</a>
         <a href="/feed" class="nav-item">Confessions</a>
         <a href="/deleteconfession" class="nav-item">Delete Confession</a>
+        <span class="nav-item" id="rate-limit-info"></span>
       </nav>
     </header>
     
@@ -114,6 +115,35 @@
     playButton.addEventListener('click', () => {
         soundEffect.play();
     });
+  </script>
+
+<script>
+    const rateLimitInfo = document.getElementById('rate-limit-info');
+    const ipAddress = '<%= req.ip %>'; // Get the user's IP address from the request
+
+    // Make a request to the server to get the rate limit info
+    fetch('/api/rate-limit', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      const count = data.count;
+      const timestamp = data.timestamp;
+      const timeDifference = Date.now() - timestamp;
+      const timeRemaining = Math.max(0, 3600000 - timeDifference); // 1 hour in milliseconds
+
+      rateLimitInfo.textContent = `Confession tries: ${count}/5 | Timer: ${formatTime(timeRemaining)}`;
+    })
+    .catch(error => console.error(error));
+
+function formatTime(time) {
+  const minutes = Math.floor(time / 60000);
+  const seconds = Math.floor((time % 60000) / 1000);
+  return `${minutes} minutes and ${seconds} seconds`;
+}
   </script>
   
 </body>
