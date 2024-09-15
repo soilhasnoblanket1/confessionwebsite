@@ -27,7 +27,7 @@ async function rateLimitMiddleware(req, res, next) {
     }
 
     // Find the RateLimit document for the IP address
-    const doc = await RateLimit.findOne({ ip: ipAddress }).exec();
+    const doc = await RateLimit.findOne({ ip: ipAddress, count: count }).exec();
 
     console.log(`Rate limit check for IP ${ipAddress}:`);
 
@@ -47,7 +47,7 @@ async function rateLimitMiddleware(req, res, next) {
         const pastHourDocs = await RateLimit.find({ ip: ipAddress, timestamp: { $gte: currentTime - 3600000 } });
         if (pastHourDocs.length >= 5) {
           console.log(`Rate limit exceeded for IP ${ipAddress} in the past hour. Redirecting to /static/err401`);
-          return res.redirect("/static/err401");
+          return res.redirect("/static/vpnblock");
         } else {
           doc.count = 0;
           doc.timestamp = currentTime;
@@ -57,7 +57,7 @@ async function rateLimitMiddleware(req, res, next) {
 
       if (doc.count >= 5) {
         console.log(`Rate limit exceeded for IP ${ipAddress}. Redirecting to /static/err401`);
-        return res.redirect("/static/err401");
+        return res.redirect("/static/vpnblock");
       }
 
       doc.count++;
@@ -156,7 +156,7 @@ function encryptConfessionCode(confessionId) {
 app.get('/rate-limit', async (req, res) => {
   const ipAddress = req.ip;
   try {
-    let doc = await RateLimit.findOne({ ip: ipAddress });
+    let doc = await RateLimit.findOne({ ip: ipAddress, count });
     if (!doc) {
       doc = new RateLimit({ ip: ipAddress, count: 0, timestamp: Date.now() });
       await doc.save();
@@ -168,7 +168,7 @@ app.get('/rate-limit', async (req, res) => {
         // Check if the IP address has exceeded the rate limit in the past hour
         const pastHourDocs = await RateLimit.find({ ip: ipAddress, timestamp: { $gte: currentTime - 3600000 } });
         if (pastHourDocs.length >= 5) {
-          return res.status(401).send('<span>Rate limit exceeded. Please try again later.</span>');
+          return res.status(401).send('<span>Limit reached</span>');
         } else {
           doc.count = 0;
           doc.timestamp = currentTime;
