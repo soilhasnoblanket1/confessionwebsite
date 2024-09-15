@@ -181,17 +181,54 @@ app.get("/bin/cementglazeddoughnuts/adminpanel", (req, res) => {
     });
 });
 
-app.get("/panel/cred123456/backup", (req, res) => {
-  ConfessionBackup.find()
-    .then((confessions) => {
-      res.render("backup", { confessions: confessions });
-    })
-    .catch((err) => {
-      console.error(err);
-      res
-        .status(500)
-        .json({ error: "An error occurred while fetching confessions" });
+app.get('/confession/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).send('Invalid confession ID');
+    }
+
+    const confession = await Confession.findById(id);
+    if (!confession) {
+      return res.status(404).send('Confession not found');
+    }
+
+    console.log('Confession:', confession);
+
+    const comments = await Comment.find({ confession: new mongoose.Types.ObjectId(id) }).catch((err) => {
+      console.error('Error fetching comments:', err);
+      res.status(500).send('Error fetching comments');
     });
+
+    res.render('confession', { confession, comments, formatTimeDifference });
+  } catch (err) {
+    console.error('Error:', err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+app.post("/post/:id", async (req, res) => {
+  try {
+    const confessionId = new mongoose.Types.ObjectId(req.params.id);
+    const confession = await Confession.findById(confessionId);
+    if (!confession) {
+      return res.status(404).json({ error: "Confession not found" });
+    }
+
+    if (!req.body.text) {
+      return res.status(400).json({ error: "Text is required" });
+    }
+
+    const comment = new Comment({
+      text: req.body.text,
+      confession: confessionId,
+    });
+    await comment.save();
+    res.redirect('back');
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to create comment" });
+  }
 });
 
 module.exports = app;
