@@ -6,7 +6,9 @@ const Confession = require("../models/confession.js");
 const path = require("path");
 const rateLimitMiddleware = require('./api.js');
 
-app.get("/", rateLimitMiddleware, (req, res, next) => {
+app.use(rateLimitMiddleware);
+
+app.get("/", (req, res, next) => {
   if (req.vpnDetected === true) {
     console.log(`VPN detected for IP ${req.ip}. Redirecting to /static/err403`);
     return res.status(401).redirect("/static/vpnblock");
