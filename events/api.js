@@ -149,13 +149,16 @@ function encryptConfessionCode(confessionId) {
 app.get('/rate-limit', async (req, res) => {
   const ipAddress = req.ip;
   try {
-    const doc = await RateLimit.findOne({ ip: ipAddress });
+    let doc = await RateLimit.findOne({ ip: ipAddress });
     if (!doc) {
-      const response = { count: 0, timestamp: Date.now() };
-      res.send(`<span>Count: ${response.count}, Timestamp: ${response.timestamp}</span>`);
+      doc = new RateLimit({ ip: ipAddress, count: 0, timestamp: Date.now() });
+      await doc.save();
     } else {
-      res.send(`<span>Count: ${doc.count}, Timestamp: ${doc.timestamp}</span>`);
+      doc.count++;
+      doc.timestamp = Date.now();
+      await doc.save();
     }
+    res.send(`<span>Count: ${doc.count}</span>`);
   } catch (err) {
     console.error(err);
     res.status(500).send('<span>Error: Internal Server Error</span>');
