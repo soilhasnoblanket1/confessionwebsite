@@ -112,6 +112,31 @@ function formatTimeDifference(createdAt) {
   }
 }
 
+
+app.get('/api/confessions', async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = 10; // number of confessions per page
+
+  try {
+    const totalConfessions = await Confession.countDocuments();
+    const confessions = await Confession.aggregate([
+      {
+        $lookup: {
+          from: 'comments',
+          localField: '_id',
+          foreignField: 'confession',
+          as: 'comments'
+        }
+      }
+    ]).skip((page - 1) * limit).limit(limit);
+
+    res.json({ confessions, totalConfessions, page, limit });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 app.get("/feed", (req, res) => {
   Confession.find().then((confessions) => {
 
