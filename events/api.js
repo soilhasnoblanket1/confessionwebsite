@@ -14,14 +14,15 @@ async function rateLimitMiddleware(req, res, next) {
   const ipAddress = req.headers["x-forwarded-for"].split(',')[0].trim() || req.connection.remoteAddress;
 
   try {
-    // Check if the IP address is associated with a VPN using vpnai.io
     const vpnCheckUrl = `https://vpnapi.io/api/${ipAddress}?key=9700a80a63c3490a813371c58034ad7f`;
     const vpnCheckResponse = await axios.get(vpnCheckUrl);
     const vpnData = vpnCheckResponse.data;
 
     if (vpnData.security.vpn === true) {
-      console.log(`VPN detected for IP ${ipAddress}. Redirecting to /static/vpnblock`);
-      return res.redirect("/static/vpnblock");
+      req.vpnDetected = true; // Set the req.vpnDetected property to true
+      console.log(`VPN detected for IP ${ipAddress}`);
+    } else {
+      req.vpnDetected = false; // Set the req.vpnDetected property to false
     }
 
     // Find the RateLimit document for the IP address
@@ -60,6 +61,7 @@ async function rateLimitMiddleware(req, res, next) {
     console.error(err);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
+  next();
 }
 
 app.post("/submit", rateLimitMiddleware, (req, res) => {
