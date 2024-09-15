@@ -68,6 +68,7 @@ async function rateLimitMiddleware(req, res, next) {
 app.post("/submit", rateLimitMiddleware, (req, res) => {
   const confession = req.body.confession;
   const nickname = req.body.nickname;
+  const ipAddress = req.headers["x-forwarded-for"].split(',')[0].trim() || req.connection.remoteAddress;
   const gRecaptchaResponse = req.body['g-recaptcha-response'];
 
   // Validate the reCAPTCHA response
@@ -97,7 +98,7 @@ app.post("/submit", rateLimitMiddleware, (req, res) => {
       // If the reCAPTCHA response is valid, proceed with the rest of the code
       const newConfession = new Confession({
         confession: confession,
-        nickname: nickname,
+        ipaddress: ipAddress,
       });
 
       newConfession
