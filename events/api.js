@@ -151,17 +151,16 @@ app.get('/rate-limit', async (req, res) => {
   try {
     const doc = await RateLimit.findOne({ ip: ipAddress });
     if (!doc) {
-      res.json({ count: 0, timestamp: Date.now() });
+      const response = { count: 0, timestamp: Date.now() };
+      res.send(`<span>Count: ${response.count}, Timestamp: ${response.timestamp}</span>`);
     } else {
-      res.json({ count: doc.count, timestamp: doc.timestamp });
+      res.send(`<span>Count: ${doc.count}, Timestamp: ${doc.timestamp}</span>`);
     }
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).send('<span>Error: Internal Server Error</span>');
   }
 });
-
-//...
 
 app.post("/deleteconf", (req, res) => {
   const encryptedConfessionId = req.body.objectId; // Get the encrypted confession ID from the request body
