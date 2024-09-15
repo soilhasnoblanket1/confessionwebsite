@@ -161,8 +161,26 @@ app.get('/rate-limit', async (req, res) => {
       doc = new RateLimit({ ip: ipAddress, count: 0, timestamp: Date.now() });
       await doc.save();
     } else {
+      const currentTime = Date.now();
+      const timeDifference = currentTime - doc.timestamp;
+
+      if (timeDifference >= 3600000) { // 1 hour in milliseconds
+        // Check if the IP address has exceeded the rate limit in the past hour
+        const pastHourDocs = await RateLimit.find({ ip: ipAddress, timestamp: { $gte: currentTime - 3600000 } });
+        if (pastHourDocs.length >= 5) {
+          return res.status(401).send('<span>Rate limit exceeded. Please try again later.</span>');
+        } else {
+          doc.count = 0;
+          doc.timestamp = currentTime;
+        }
+      }
+
+      if (doc.count >= 5) {
+        return res.status(401).send('<span>Rate limit exceeded. Please try again later.</span>');
+      }
+
       doc.count++;
-      doc.timestamp = Date.now();
+      doc.timestamp = currentTime;
       await doc.save();
     }
     res.send(`<span>Count: ${doc.count}</span>`);
