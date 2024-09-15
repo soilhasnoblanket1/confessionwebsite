@@ -4,6 +4,7 @@ const app = express.Router();
 const path = require("path");
 const mongoose = require("mongoose");
 const crypto = require("crypto");
+const axios = require('axios'):
 
 const Confession = require("../models/confession.js");
 const RateLimit = require("../models/limit.js");
@@ -20,7 +21,7 @@ async function rateLimitMiddleware(req, res, next) {
 
     if (vpnData.vpn === true) {
       console.log(`VPN detected for IP ${ipAddress}. Redirecting to /static/err403`);
-      return res.redirect("/static/err403");
+      return res.status(401).json({ error: "Abhisekhhh.. VPN is blocked..." });
     }
 
     // Find the RateLimit document for the IP address
