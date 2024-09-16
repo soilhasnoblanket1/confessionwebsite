@@ -357,6 +357,7 @@ app.post('/admin/react', express.urlencoded({ extended: true }), (req, res) => {
         } else {
           // React with the specified reaction
           message.react(reaction);
+          message.react('❌');
         }
       }
     });
