@@ -18,7 +18,6 @@ app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 app.use("/", routermain);
 app.use("/api", routerapi);
-app.use("/talents", routertal);
 app.get("*", (req, res) => {
   res.redirect("/");
 });
