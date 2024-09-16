@@ -253,7 +253,7 @@ const upload = multer({
 const { Attachment } = require('discord.js');
 const sharp = require('sharp');
 
-app.post('/post/image', upload.single('image'), async (req, res) => {
+app.post('/postimg/image', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
       throw new Error('No file uploaded');
