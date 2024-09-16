@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Image Upload</title>
+  <style>
+    /* Global Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+    }
+
+    /* Container Styles */
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Form Styles */
+    form {
+      margin-bottom: 20px;
+    }
+
+    input[type="file"] {
+      margin-bottom: 10px;
+    }
+
+    button[type="submit"] {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #3e8e41;
+    }
+
+/* Image List Styles */
+#images-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#images-list li {
+  margin-bottom: 20px;
+}
+
+#images-list img {
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+/* Portrait images */
+#images-list img[orient="portrait"] {
+  height: 150px;
+  width: auto;
+}
+
+/* Landscape images */
+#images-list img[orient="landscape"] {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      .container {
+        margin: 20px auto;
+      }
+
+      #images-list img {
+        height: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Upload an image</h1>
+    <form action="/image" method="post" enctype="multipart/form-data">
+      <input type="file" name="image" />
+      <button type="submit">Upload</button>
+    </form>
+    <h2>Uploaded images:</h2>
+    <ul id="images-list">
+        <% images.forEach(image => { %>
+          <li><img src="<%= image %>" alt="Uploaded image" orient="<%= image.orientation %>" /></li>
+        <% }); %>
+      </ul>
+  </div>
+</body>
+</html>
