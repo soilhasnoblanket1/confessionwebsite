@@ -64,6 +64,10 @@ app.get("/fortune", (req, res) => {
   res.render("fortune");
 });
 
+app.get("/static/imgfetch", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "error", "imgfetch.html"));
+});
+
 app.get("/static/deleted", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "error", "deleted.html"));
 });
