@@ -3,63 +3,69 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const app = express();
 const Confession = require("../models/confession.js");
-const Comment = require("../models/comment.model");
 const path = require("path");
-const rateLimitMiddleware = require('./api.js');
+const Comment = require("../models/comment.model");
+const Discord = require('discord.js');
 
+const discordConfig = {
+  token: process.env.BOTTOKEN,
+  clientId: '1285231651332558909',
+  guildId: '1141793551403978803',
+  channelId: '1285234436560130151'
+};
 
-app.get("/", (req, res, next) => {
-  if (req.vpnDetected === true) {
-    console.log(`VPN detected for IP ${req.ip}. Redirecting to /static/err403`);
-    return res.status(401).redirect("/static/vpnblock");
+const client = new Discord.Client({
+    intents: [
+      Discord.GatewayIntentBits.Guilds,
+      Discord.GatewayIntentBits.GuildMembers,
+      Discord.GatewayIntentBits.GuildMessages,
+      Discord.GatewayIntentBits.MessageContent
+    ]
+  });
+
+client.login(discordConfig.token);
+
+const multer = require('multer');
+
+function formatTimeDifference(date) {
+  const now = new Date();
+  const diffMs = now - date;
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHr = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHr / 24);
+
+  if (diffDay > 0) {
+    return `${diffDay} days ago`;
+  } else if (diffHr > 0) {
+    return `${diffHr} hours ago`;
+  } else if (diffMin > 0) {
+    return `${diffMin} minutes ago`;
+  } else {
+    return `a few seconds ago`;
   }
+}
 
+app.get("/", (req, res) => {
   Confession.find().then((confessions) => {
-    function formatTimeDifference(date) {
-      const now = new Date();
-      const diffMs = now - date;
-      const diffSec = Math.floor(diffMs / 1000);
-      const diffMin = Math.floor(diffSec / 60);
-      const diffHr = Math.floor(diffMin / 60);
-      const diffDay = Math.floor(diffHr / 24);
-
-      if (diffDay > 0) {
-        return `${diffDay} days ago`;
-      } else if (diffHr > 0) {
-        return `${diffHr} hours ago`;
-      } else if (diffMin > 0) {
-        return `${diffMin} minutes ago`;
-      } else {
-        return `a few seconds ago`;
-      }
-    }
-    const ipAddress = req.ip;
     res.render("index", {
       confessions: confessions,
       formatTimeDifference,
-      ipAddress: ipAddress, 
     });
   });
 });
+
 
 app.get("/sabal", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "html", "html", "sabal.html"));
 });
 
-app.get("/game", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "html", "html", "game.html"));
-});
-
-app.get("/nav", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "html", "html", "nav.html"));
+app.get("/fortune", (req, res) => {
+  res.render("fortune");
 });
 
 app.get("/static/deleted", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "error", "deleted.html"));
-});
-
-app.get("/static/vpnblock", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "error", "vpnblock.html"));
 });
 
 app.get("/static/errcaptcha", (req, res) => {
@@ -88,36 +94,15 @@ mongoose
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
 
-//
 app.get("/deleteconfession", (req, res) => {
   Confession.find().then((confessions) => {
     res.render("delete", { confessions: confessions });
   });
 });
 
-function formatTimeDifference(createdAt) {
-  const currentTime = new Date();
-  const timeDifference = currentTime - createdAt;
-  const seconds = Math.floor(timeDifference / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  const days = Math.floor(hours / 24);
-
-  if (days > 0) {
-    return `${days} day${days > 1? 's' : ''} ago`;
-  } else if (hours > 0) {
-    return `${hours} hour${hours > 1? 's' : ''} ago`;
-  } else if (minutes > 0) {
-    return `${minutes} minute${minutes > 1? 's' : ''} ago`;
-  } else {
-    return `${seconds} second${seconds > 1? 's' : ''} ago`;
-  }
-}
-
-
 app.get('/api/confessions', async (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  const limit = 10;
+  const limit = 10; // number of confessions per page
 
   try {
     const totalConfessions = await Confession.countDocuments();
@@ -178,22 +163,6 @@ app.get('/feed', async (req, res) => {
   }
 });
 
-app.get("/bin/cementglazeddoughnuts/adminpanel", (req, res) => {
-  Confession.find()
-   .then((confessions) => {
-      res.render("admin", { 
-        confessions: confessions,
-        formatTimeDifference,
-      });
-    })
-   .catch((err) => {
-      console.error(err);
-      res
-       .status(500)
-       .json({ error: "An error occurred while fetching confessions" });
-    });
-});
-
 app.get('/confession/:id', async (req, res) => {
   try {
     const id = req.params.id;
@@ -244,4 +213,151 @@ app.post("/post/:id", async (req, res) => {
   }
 });
 
+app.get("/bin/cementglazeddoughnuts/adminpanel", (req, res) => {
+  Confession.find()
+   .then((confessions) => {
+      res.render("admin", { 
+        confessions: confessions,
+        formatTimeDifference,
+      });
+    })
+   .catch((err) => {
+      console.error(err);
+      res
+       .status(500)
+       .json({ error: "An error occurred while fetching confessions" });
+    });
+});
+
+app.get("/panel/cred123456/backup", (req, res) => {
+  ConfessionBackup.find()
+    .then((confessions) => {
+      res.render("backup", { confessions: confessions });
+    })
+    .catch((err) => {
+      console.error(err);
+      res
+        .status(500)
+        .json({ error: "An error occurred while fetching confessions" });
+    });
+});
+const upload = multer({
+  storage: multer.diskStorage({}),
+  fileFilter(req, file, cb) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+      return cb(new Error('Only JPG, JPEG, PNG, and GIF files are allowed'));
+    }
+    cb(null, true);
+  }
+});
+const { Attachment } = require('discord.js');
+const sharp = require('sharp');
+
+app.post('/post/image', upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      throw new Error('No file uploaded');
+    }
+    const file = req.file;
+    if (!file.path || !file.originalname) {
+      throw new Error('Invalid file uploaded');
+    }
+    try {
+      const buffer = await sharp(file.path).toBuffer();
+      const messagePayload = {
+        embeds: [
+          {
+            title: 'Image uploaded successfully!',
+            description: 'fuck u saurav',
+            image: {
+              url: 'attachment://' + file.originalname
+            }
+          }
+        ],
+        files: [{ attachment: buffer, name: file.originalname }]
+      };
+      const message = await client.channels.cache.get(discordConfig.channelId).send(messagePayload);
+      res.redirect('/images');
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error processing image');
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error uploading image');
+  }
+});
+
+app.get('/panel/sauravchor/post', (req, res) => {
+  const images = [];
+  client.channels.cache.get(discordConfig.channelId).messages.fetch().then(messages => {
+    messages.forEach(message => {
+      // Fetch images from attachments and embeds
+      if (message.attachments.size > 0) {
+        message.attachments.forEach(attachment => {
+          images.push(attachment.url);
+        });
+      }
+      if (message.embeds.length > 0) {
+        message.embeds.forEach(embed => {
+          if (embed.image) {
+            images.push(embed.image.url);
+          }
+        });
+      }
+    });
+
+    res.render('adminpost', { images });
+  });
+});
+
+app.get('/images', (req, res) => {
+  const images = [];
+  client.channels.cache.get(discordConfig.channelId).messages.fetch().then(messages => {
+    messages.forEach(message => {
+      // Fetch images from attachments and embeds
+      if (message.attachments.size > 0) {
+        message.attachments.forEach(attachment => {
+          images.push({ url: attachment.url, message });
+        });
+      }
+      if (message.embeds.length > 0) {
+        message.embeds.forEach(embed => {
+          if (embed.image) {
+            images.push({ url: embed.image.url, message });
+          }
+        });
+      }
+    });
+
+    const reactedImages = images.filter(image => {
+      const reactions = Array.from(image.message.reactions.cache.values());
+      return reactions.some(reaction => reaction.emoji.toString() === '✅');
+    });
+
+    res.render('images', { images: reactedImages.map(image => image.url) });
+  });
+});
+
+app.post('/admin/react', express.urlencoded({ extended: true }), (req, res) => {
+  const { image, reaction } = req.body;
+  console.log(reaction);
+  
+  // Find the message containing the image
+  client.channels.cache.get(discordConfig.channelId).messages.fetch().then(messages => {
+    messages.forEach(message => {
+      if (message.attachments.some(attachment => attachment.url === image) ||
+          message.embeds.some(embed => embed.image && embed.image.url === image) ||
+          message.content.includes(image)) {
+        // Remove the "tick" emoji reaction if the reaction is "cross"
+        if (reaction === '❌') {
+          message.reactions.resolve('✅').remove();
+        } else {
+          // React with the specified reaction
+          message.react(reaction);
+        }
+      }
+    });
+  });
+});
 module.exports = app;
