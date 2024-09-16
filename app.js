@@ -7,7 +7,6 @@ const path = require("path");
 const ejs = require("ejs");
 const routermain = require("./events/route.js");
 const routerapi = require("./events/api.js");
-const routertal = require("./events/talents.js");
 const app = express();
 
 app.set("view engine", "ejs");
