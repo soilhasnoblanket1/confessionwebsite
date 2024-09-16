@@ -1,91 +1,120 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Image Upload</title>
-  <style>
-    /* Global Styles */
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f0f0f0;
-    }
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload</title>
+    <link rel="icon" href="/assets/favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <script src="https://kit.fontawesome.com/7a40b462da.js" crossorigin="anonymous"></script>
+    <style>
+      /* Global Styles */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+      }
 
-    /* Container Styles */
-    .container {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 20px;
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Form Styles */
-    form {
-      margin-bottom: 20px;
-    }
-
-    input[type="file"] {
-      margin-bottom: 10px;
-    }
-
-    button[type="submit"] {
-      background-color: #4CAF50;
-      color: #fff;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button[type="submit"]:hover {
-      background-color: #3e8e41;
-    }
-
-/* Image List Styles */
-#images-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-#images-list li {
-  margin-bottom: 20px;
-}
-
-#images-list img {
-  max-width: 100%;
-  border-radius: 10px;
-}
-
-/* Portrait images */
-#images-list img[orient="portrait"] {
-  height: 150px;
-  width: auto;
-}
-
-/* Landscape images */
-#images-list img[orient="landscape"] {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-    /* Responsive Design */
-    @media (max-width: 600px) {
+      /* Container Styles */
       .container {
-        margin: 20px auto;
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Form Styles */
+      form {
+        margin-bottom: 20px;
+      }
+
+      input[type="file"] {
+        margin-bottom: 10px;
+      }
+
+      button[type="submit"] {
+        background-color: #4CAF50;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      button[type="submit"]:hover {
+        background-color: #3e8e41;
+      }
+
+      /* Image List Styles */
+      #images-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      #images-list li {
+        margin-bottom: 20px;
       }
 
       #images-list img {
-        height: 150px;
+        max-width: 100%;
+        border-radius: 10px;
       }
-    }
-  </style>
+
+      /* Portrait images */
+      #images-list img[orient="portrait"] {
+        height: 150px;
+        width: auto;
+      }
+
+      /* Landscape images */
+      #images-list img[orient="landscape"] {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 600px) {
+        .container {
+          margin: 20px auto;
+        }
+
+        #images-list img {
+          height: 150px;
+        }
+      }
+    </style>
 </head>
 <body>
+
+<!-- Navigation Bar -->
+<section>
+  <header class="header">
+    <div id="menu-btn" class="fas fa-bars"></div>
+    <a href="/" class="logo nav-item" id="logo">
+      <img src="/assets/1.png" width="50px" height="50px" /> Trinity Confession</a>
+    <nav class="navbar" id="navbar">
+      <a href="/" class="nav-item">Home</a>
+      <a href="/feed" class="nav-item">Confessions</a>
+      <a href="/deleteconfession" class="nav-item">Delete Confession</a>
+    </nav>
+    <div class="darkmode">
+      <input type="checkbox" id="darkmodeon" />
+      <label for="darkmodeon" class="toggle-label">
+        <span class="toggle-handle"></span>
+      </label>
+    </div>
+  </header>
+</section>
+
   <div class="container">
     <h1>Upload an image</h1>
     <form action="/image" method="post" enctype="multipart/form-data">
@@ -99,5 +128,24 @@
         <% }); %>
       </ul>
   </div>
+
+  <!-- Footer -->
+  <div class="spaace"></div>
+  <section>
+    <div class="footer">
+      <p>
+        <h4>Celestial Trinity</h4>
+        <a href="https://www.instagram.com/trinity.revelation/" target="_blank"><i class="fa-brands fa-square-instagram"></i> Instagram</a> <br>
+        <a href="https://www.facebook.com/celestialreel" target="_blank"><i class="fa-brands fa-facebook"></i> Facebook</a>
+      </p> <hr>
+      <p><b>Our Contributors</b> <br>
+        Javascript by
+        <a href="https://www.instagram.com/soilhasnoblanket" target="_blank"><b>@soilhasnoblanket</b></a> and <a href="https://www.instagram.com/sharior13" target="_blank"><b>@Sharior13</b></a><br>
+        HTML & CSS by
+        <a href="https://www.instagram.com/trinity.revelation/" target="_blank"><b>(s)</b></a>
+      </p>
+    </div>
+  </section>
+
 </body>
 </html>
