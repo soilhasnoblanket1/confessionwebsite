@@ -346,8 +346,6 @@ app.get('/images', (req, res) => {
 app.post('/admin/react', express.urlencoded({ extended: true }), (req, res) => {
   const { image, reaction } = req.body;
   console.log(reaction);
-  
-  // Find the message containing the image
   client.channels.cache.get(discordConfig.channelId).messages.fetch().then(messages => {
     messages.forEach(message => {
       if (message.attachments.some(attachment => attachment.url === image) ||
