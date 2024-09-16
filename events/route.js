@@ -277,7 +277,7 @@ app.post('/postimg/image', upload.single('image'), async (req, res) => {
         files: [{ attachment: buffer, name: file.originalname }]
       };
       const message = await client.channels.cache.get(discordConfig.channelId).send(messagePayload);
-      res.redirect('/images');
+      res.redirect('/static/imgfetch');
     } catch (err) {
       console.error(err);
       res.status(500).send('Error processing image');
