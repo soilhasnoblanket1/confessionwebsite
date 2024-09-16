@@ -335,8 +335,8 @@ app.get('/images', (req, res) => {
     });
 
     const reactedImages = images.filter(image => {
-      const reactions = Array.from(image.message.reactions.cache.values());
-      return reactions.some(reaction => reaction.emoji.toString() === '✅');
+      const reaction = image.message.reactions.resolve('✅');
+      return reaction && reaction.count > 0;
     });
 
     res.render('images', { images: reactedImages.map(image => image.url) });
