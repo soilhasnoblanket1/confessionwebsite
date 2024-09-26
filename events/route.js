@@ -60,6 +60,10 @@ app.get("/sabal", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "html", "html", "sabal.html"));
 });
 
+app.get("/static/vpnblock", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "html", "html", "vpnblock.html"));
+});
+
 app.get("/fortune", (req, res) => {
   res.render("fortune");
 });
