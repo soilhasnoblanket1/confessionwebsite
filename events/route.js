@@ -61,7 +61,7 @@ app.get("/sabal", (req, res) => {
 });
 
 app.get("/static/vpnblock", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "html", "html", "vpnblock.html"));
+  res.sendFile(path.join(__dirname, "..", "error", "vpnblock.html"));
 });
 
 app.get("/fortune", (req, res) => {
