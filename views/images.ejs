@@ -22,8 +22,15 @@
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
-      form {
+
+      /* Upload Form Styles */
+      .upload-form {
         margin-bottom: 20px;
+        padding: 20px;
+        background-color: #f7f7f7;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
 
       input[type="file"] {
@@ -83,32 +90,53 @@
         }
       }
 
-.image-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+      /* Image Container Styles */
+      .image-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+      }
 
-.caption {
-  font-size: 16px;
-  color: #666;
-  margin-top: 10px;
-}
+      /* Caption Styles */
+      .caption {
+        font-size: 16px;
+        color: #666;
+        margin-top: 10px;
+        position: absolute;
+        right: 20px;
+        bottom: 20px;
+        background-color: #fff;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
 
-/* Mobile support */
-@media (max-width: 600px) {
-  .image-container {
-    flex-direction: column;
-    align-items: center;
-  }
-  .caption {
-    font-size: 14px;
-  }
-}
+      /* Separator Styles */
+      .separator {
+        height: 1px;
+        background-color: #ddd;
+        margin: 20px 0;
+      }
+
+      /* Animation Styles */
+      .animate {
+        animation: fadeIn 2s;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
     </style>
 </head>
 <body>
@@ -122,25 +150,29 @@
     <nav class="navbar" id="navbar">
       <a href="/" class="nav-item">Home</a>
       <a href="/feed" class="nav-item">Confessions</a>
-<a href="/images" class="nav-item">Images</a>
+      <a href="/images" class="nav-item">Images</a>
       <a href="/deleteconfession" class="nav-item">Delete Confession</a>
     </nav>
   </header>
 </section>
 
-  <div class="container">
+<!-- Upload Form -->
+<div class="container">
   <h1>Upload an image</h1>
-  <form action="/postimg/image" method="post" enctype="multipart/form-data">
-    <input type="file" name="image" />
-    <input type="text" name="caption" placeholder="Add a caption" />
-    <button type="submit">Upload</button>
-  </form>
+  <div class="upload-form">
+    <form action="/postimg/image" method="post" enctype="multipart/form-data">
+      <input type="file" name="image" />
+      <input type="text" name="caption" placeholder="Add a caption" />
+      <button type="submit">Upload</button>
+    </form>
+  </div>
+  <div class="separator"></div>
   <h2>Uploaded images:</h2>
   <ul id="images-list">
     <% images.forEach(image => { %>
       <li>
-        <div class="image-container">
-          <img src="<%= image %>" alt="Uploaded image" orient="<%= image.orientation %>" />
+        <div class="image-container animate">
+          <img src="<%= image.url %>" alt="Uploaded image" orient="<%= image.orientation %>" />
           <p class="caption"><%= image.caption %></p>
         </div>
       </li>
@@ -148,23 +180,23 @@
   </ul>
 </div>
 
-  <!-- Footer -->
-  <div class="spaace"></div>
-  <section>
-    <div class="footer">
-      <p>
-        <h4>Celestial Trinity</h4>
-        <a href="https://www.instagram.com/trinity.revelation/" target="_blank"><i class="fa-brands fa-square-instagram"></i> Instagram</a> <br>
-        <a href="https://www.facebook.com/celestialreel" target="_blank"><i class="fa-brands fa-facebook"></i> Facebook</a>
-      </p> <hr>
-      <p><b>Our Contributors</b> <br>
-        Javascript by
-        <a href="https://www.instagram.com/soilhasnoblanket" target="_blank"><b>@soilhasnoblanket</b></a> and <a href="https://www.instagram.com/sharior13" target="_blank"><b>@Sharior13</b></a><br>
-        HTML & CSS by
-        <a href="https://www.instagram.com/trinity.revelation/" target="_blank"><b>(s)</b></a>
-      </p>
-    </div>
-  </section>
+<!-- Footer -->
+<div class="spaace"></div>
+<section>
+  <div class="footer">
+    <p>
+      <h4>Celestial Trinity</h4>
+      <a href="https://www.instagram.com/trinity.revelation/" target="_blank"><i class="fa-brands fa-square-instagram"></i> Instagram</a> <br>
+      <a href="https://www.facebook.com/celestialreel" target="_blank"><i class="fa-brands fa-facebook"></i> Facebook</a>
+    </p> <hr>
+    <p><b>Our Contributors</b> <br>
+      Javascript by
+      <a href="https://www.instagram.com/soilhasnoblanket" target="_blank"><b>@soilhasnoblanket</b></a> and <a href="https://www.instagram.com/sharior13" target="_blank"><b>@Sharior13</b></a><br>
+      HTML & CSS by
+      <a href="https://www.instagram.com/trinity.revelation/" target="_blank"><b>(s)</b></a>
+    </p>
+  </div>
+</section>
 
 </body>
 </html>
