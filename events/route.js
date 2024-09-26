@@ -324,16 +324,18 @@ app.get('/images', (req, res) => {
   const images = [];
   client.channels.cache.get(discordConfig.channelId).messages.fetch().then(messages => {
     messages.forEach(message => {
+      // Fetch images from attachments and embeds
       if (message.attachments.size > 0) {
         message.attachments.forEach(attachment => {
-          images.push({ url: attachment.url, message });
+          const embed = message.embeds.find(embed => embed.image && embed.image.url === attachment.url);
+          const caption = embed ? embed.description : '';
+          images.push({ url: attachment.url, caption, orientation: 'landscape' });
         });
       }
       if (message.embeds.length > 0) {
         message.embeds.forEach(embed => {
           if (embed.image) {
-            const caption = embed.description;
-            images.push({ url: embed.image.url, caption, message });
+            images.push({ url: embed.image.url, caption: embed.description, orientation: 'landscape' });
           }
         });
       }
@@ -343,7 +345,8 @@ app.get('/images', (req, res) => {
       const reaction = image.message.reactions.resolve('✅');
       return reaction && reaction.count > 0;
     });
-    res.render('images', { images: reactedImages.map(image => ({ url: image.url, caption: image.caption })) });
+
+    res.render('images', { images: reactedImages });
   });
 });
 
