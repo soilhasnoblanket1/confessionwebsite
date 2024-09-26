@@ -328,14 +328,15 @@ app.get('/images', (req, res) => {
       if (message.attachments.size > 0) {
         message.attachments.forEach(attachment => {
           const embed = message.embeds.find(embed => embed.image && embed.image.url === attachment.url);
-          const caption = embed ? embed.description : '';
+          const caption = embed ? embed.description : message.content;
           images.push({ url: attachment.url, caption, orientation: 'landscape', message });
         });
       }
       if (message.embeds.length > 0) {
         message.embeds.forEach(embed => {
           if (embed.image) {
-            images.push({ url: embed.image.url, caption: embed.description, orientation: 'landscape', message });
+            const caption = embed.description ? embed.description : message.content;
+            images.push({ url: embed.image.url, caption, orientation: 'landscape', message });
           }
         });
       }
