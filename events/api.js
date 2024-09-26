@@ -55,7 +55,7 @@ async function rateLimitMiddleware(req, res, next) {
         }
       }
 
-      if (doc.count >= 5) {
+      if (doc.count >= 3) {
         console.log(`Rate limit exceeded for IP ${ipAddress}. Redirecting to /static/err401`);
         return res.redirect("/static/err401");
       }
