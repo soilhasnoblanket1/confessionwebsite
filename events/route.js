@@ -327,16 +327,16 @@ app.get('/images', (req, res) => {
       // Fetch images from attachments and embeds
       if (message.attachments.size > 0) {
         message.attachments.forEach(attachment => {
-          const embed = message.embeds.find(embed => embed.image && embed.image.url === attachment.url);
+          const embed = message.embeds.find(embed => embed.image && embed.image.url.startsWith('attachment://'));
           const caption = embed ? embed.description : message.content;
           images.push({ url: attachment.url, caption, message });
         });
       }
       if (message.embeds.length > 0) {
         message.embeds.forEach(embed => {
-          if (embed.image) {
+          if (embed.image && embed.image.url.startsWith('attachment://')) {
             const caption = embed.description ? embed.description : message.content;
-            images.push({ url: embed.image.url, caption, message });
+            images.push({ url: embed.image.url.replace('attachment://', ''), caption, message });
           }
         });
       }
