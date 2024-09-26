@@ -329,14 +329,14 @@ app.get('/images', (req, res) => {
         message.attachments.forEach(attachment => {
           const embed = message.embeds.find(embed => embed.image && embed.image.url === attachment.url);
           const caption = embed ? embed.description : message.content;
-          images.push({ url: attachment.url, caption, orientation: 'landscape', message });
+          images.push({ url: attachment.url, caption, message });
         });
       }
       if (message.embeds.length > 0) {
         message.embeds.forEach(embed => {
           if (embed.image) {
             const caption = embed.description ? embed.description : message.content;
-            images.push({ url: embed.image.url, caption, orientation: 'landscape', message });
+            images.push({ url: embed.image.url, caption, message });
           }
         });
       }
