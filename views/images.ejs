@@ -82,6 +82,33 @@
           height: 150px;
         }
       }
+
+.image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.caption {
+  font-size: 16px;
+  color: #666;
+  margin-top: 10px;
+}
+
+/* Mobile support */
+@media (max-width: 600px) {
+  .image-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .caption {
+    font-size: 14px;
+  }
+}
     </style>
 </head>
 <body>
@@ -102,18 +129,24 @@
 </section>
 
   <div class="container">
-    <h1>Upload an image</h1>
-    <form action="/postimg/image" method="post" enctype="multipart/form-data">
-      <input type="file" name="image" />
-      <button type="submit">Upload</button>
-    </form>
-    <h2>Uploaded images:</h2>
-    <ul id="images-list">
-        <% images.forEach(image => { %>
-          <li><img src="<%= image %>" alt="Uploaded image" orient="<%= image.orientation %>" /></li>
-        <% }); %>
-      </ul>
-  </div>
+  <h1>Upload an image</h1>
+  <form action="/postimg/image" method="post" enctype="multipart/form-data">
+    <input type="file" name="image" />
+    <input type="text" name="caption" placeholder="Add a caption" />
+    <button type="submit">Upload</button>
+  </form>
+  <h2>Uploaded images:</h2>
+  <ul id="images-list">
+    <% images.forEach(image => { %>
+      <li>
+        <div class="image-container">
+          <img src="<%= image %>" alt="Uploaded image" orient="<%= image.orientation %>" />
+          <p class="caption"><%= image.caption %></p>
+        </div>
+      </li>
+    <% }); %>
+  </ul>
+</div>
 
   <!-- Footer -->
   <div class="spaace"></div>
