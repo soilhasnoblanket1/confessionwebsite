@@ -270,13 +270,14 @@ app.post('/postimg/image', upload.single('image'), async (req, res) => {
     if (!file.path || !file.originalname) {
       throw new Error('Invalid file uploaded');
     }
+    const caption = req.body.caption; // Get the caption from the request body
     try {
       const buffer = await sharp(file.path).toBuffer();
       const messagePayload = {
         embeds: [
           {
             title: 'Image uploaded successfully!',
-            description: 'fuck u saurav',
+            description: caption, // Use the caption here
             image: {
               url: 'attachment://' + file.originalname
             }
