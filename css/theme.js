@@ -1,58 +1,46 @@
-// Add a class to hide the body initially
-document.body.classList.add('hidden');
+const styleToggle = document.getElementById('style-toggle');
+const cookieName = 'stylePreference';
 
-// Check cookie on page load and apply correct style
 const cookieValue = getCookie(cookieName);
 let currentStyle = 'modern';
+let styleElement;
+
 if (cookieValue === 'old') {
   currentStyle = 'old';
-  const newStyleLink = document.createElement('link');
-  newStyleLink.rel = 'stylesheet';
-  newStyleLink.href = '/styleold.css';
-  newStyleLink.onload = function() {
-    // Remove the hidden class once the CSS is loaded
-    document.body.classList.remove('hidden');
-  };
-  document.head.appendChild(newStyleLink);
+  loadCss('/styleold.css');
 } else {
-  const newStyleLink = document.createElement('link');
-  newStyleLink.rel = 'stylesheet';
-  newStyleLink.href = '/style.css';
-  newStyleLink.onload = function() {
-    // Remove the hidden class once the CSS is loaded
-    document.body.classList.remove('hidden');
-  };
-  document.head.appendChild(newStyleLink);
+  loadCss('/style.css');
 }
 
 styleToggle.addEventListener('click', () => {
   if (currentStyle === 'modern') {
     currentStyle = 'old';
     document.cookie = `${cookieName}=old; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
-    const oldStyleLink = document.querySelector('link[href="/style.css"]');
-    if (oldStyleLink) {
-      oldStyleLink.remove();
-    }
-    const newStyleLink = document.createElement('link');
-    newStyleLink.rel = 'stylesheet';
-    newStyleLink.href = '/styleold.css';
-    newStyleLink.onload = function() {
-      document.body.classList.remove('hidden');
-    };
-    document.head.appendChild(newStyleLink);
+    loadCss('/styleold.css');
   } else {
     currentStyle = 'modern';
     document.cookie = `${cookieName}=modern; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
-    const oldStyleLink = document.querySelector('link[href="/styleold.css"]');
-    if (oldStyleLink) {
-      oldStyleLink.remove();
-    }
-    const newStyleLink = document.createElement('link');
-    newStyleLink.rel = 'stylesheet';
-    newStyleLink.href = '/style.css';
-    newStyleLink.onload = function() {
-      document.body.classList.remove('hidden');
-    };
-    document.head.appendChild(newStyleLink);
+    loadCss('/style.css');
   }
 });
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+function loadCss(url) {
+  if (styleElement) {
+    styleElement.remove();
+  }
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', url, false);
+  xhr.send();
+
+  if (xhr.status === 200) {
+    styleElement = document.createElement('style');
+    styleElement.textContent = xhr.responseText;
+    document.head.appendChild(styleElement);
+  }
+}
