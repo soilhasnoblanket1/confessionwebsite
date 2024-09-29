@@ -7,8 +7,8 @@
   <title>Feed | Celestial Trinity</title>
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
-  <link rel="stylesheet" type="text/css" href="style.css" />
   <script src="https://kit.fontawesome.com/7a40b462da.js" crossorigin="anonymous"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -24,13 +24,14 @@
         <a href="/feed" class="nav-item">Confessions</a>
 <a href="/images" class="nav-item">Images</a>
         <a href="/deleteconfession" class="nav-item">Delete Confession</a>
+        <button id="style-toggle" aria-label="Toggle stylesheet">Toggle Style</button>
       </nav>
     </header>
   </section>
 
 <!-- Body -->
 <div class="feed-container">
-  <h1>Confessions</h1>
+  <h1 style="font-family: 'Press Start 2P', cursive; font-size: 36px;">Confessions</h1>
   <div class="sb">
     <input type="text" id="search-box" class="search-box" placeholder="Search confessions...">
   </div>
@@ -40,7 +41,7 @@
         <div class="confession-card">
           <p style="font-weight: bold; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; font-size: 12px; border-radius: 10px;">#<%= confessions.length - index %></p>
           <p><%= confession.confession %></p>
-          <p style="color: #666; font-size: 12px;">Posted <%= formatTimeDifference(confession.createdAt) %></p>
+          <pre style="color: rgb(39, 39, 39); font-size: 12px;">Posted <%= formatTimeDifference(confession.createdAt) %></pre>
           <% if (confession.comments.length > 0) { %>
             <a href="/confession/<%= confession._id %>">
               <img src="https://img.icons8.com/material-outlined/24/000000/speech-bubble.png" alt="Comment Icon">
@@ -142,5 +143,6 @@ function loadConfessions() {
     });
 }
   </script>
+  <script src="/theme.js"></script>
 </body>
 </html>

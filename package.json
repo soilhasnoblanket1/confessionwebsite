@@ -4,6 +4,7 @@
     "@netlify/functions": "^2.6.0",
     "@types/express": "^4.17.21",
     "body-parser": "^1.20.2",
+    "discord.js": "^14.16.2",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "instagram-api": "^1.0.3",
@@ -11,11 +12,13 @@
     "lavalink": "^2.13.0",
     "lodash": "^4.17.21",
     "mongoose": "^8.5.2",
+    "multer": "^1.4.5-lts.1",
     "node-instagram": "^4.3.0",
     "octokit": "^3.2.0",
     "path": "^0.12.7",
     "request": "^2.88.2",
     "serverless-http": "^3.2.0",
+    "sharp": "^0.33.5",
     "socket.io": "^4.7.5",
     "web-streams-polyfill": "^4.0.0",
     "ws": "^8.16.0"
@@ -23,5 +26,9 @@
   "scripts": {
     "build": "npm install ejs express body-parser path mongoose discord.js multer sharp axios",
     "start": "node app.js"
+  },
+  "devDependencies": {
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.13"
   }
 }
