@@ -51,15 +51,13 @@ function loadCss(url) {
     styleElement.remove();
   }
 
-  const xhr = new XMLHttpRequest();
-  xhr.open('GET', url, false);
-  xhr.send();
-
-  if (xhr.status === 200) {
-    styleElement = document.createElement('style');
-    styleElement.textContent = xhr.responseText;
-    document.head.appendChild(styleElement);
-  }
+  fetch(url)
+    .then(response => response.text())
+    .then(css => {
+      styleElement = document.createElement('style');
+      styleElement.textContent = css;
+      document.head.appendChild(styleElement);
+    });
 }
 
 function playMusic() {
