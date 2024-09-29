@@ -1,5 +1,5 @@
-const styleToggle = document.getElementById('style-toggle');
-const cookieName = 'stylePreference';
+// Add a class to hide the body initially
+document.body.classList.add('hidden');
 
 // Check cookie on page load and apply correct style
 const cookieValue = getCookie(cookieName);
@@ -9,11 +9,19 @@ if (cookieValue === 'old') {
   const newStyleLink = document.createElement('link');
   newStyleLink.rel = 'stylesheet';
   newStyleLink.href = '/styleold.css';
+  newStyleLink.onload = function() {
+    // Remove the hidden class once the CSS is loaded
+    document.body.classList.remove('hidden');
+  };
   document.head.appendChild(newStyleLink);
 } else {
   const newStyleLink = document.createElement('link');
   newStyleLink.rel = 'stylesheet';
   newStyleLink.href = '/style.css';
+  newStyleLink.onload = function() {
+    // Remove the hidden class once the CSS is loaded
+    document.body.classList.remove('hidden');
+  };
   document.head.appendChild(newStyleLink);
 }
 
@@ -28,6 +36,9 @@ styleToggle.addEventListener('click', () => {
     const newStyleLink = document.createElement('link');
     newStyleLink.rel = 'stylesheet';
     newStyleLink.href = '/styleold.css';
+    newStyleLink.onload = function() {
+      document.body.classList.remove('hidden');
+    };
     document.head.appendChild(newStyleLink);
   } else {
     currentStyle = 'modern';
@@ -39,13 +50,9 @@ styleToggle.addEventListener('click', () => {
     const newStyleLink = document.createElement('link');
     newStyleLink.rel = 'stylesheet';
     newStyleLink.href = '/style.css';
+    newStyleLink.onload = function() {
+      document.body.classList.remove('hidden');
+    };
     document.head.appendChild(newStyleLink);
   }
 });
-
-// Helper function to get cookie value
-function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
-}
