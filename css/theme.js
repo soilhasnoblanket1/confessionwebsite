@@ -56,9 +56,11 @@ function loadCss(url) {
     .then(css => {
       styleElement = document.createElement('style');
       styleElement.textContent = css;
+      styleElement.async = true; // saurav chor
       document.head.appendChild(styleElement);
     });
 }
+
 
 function playMusic() {
   if (!musicPlaying) {
