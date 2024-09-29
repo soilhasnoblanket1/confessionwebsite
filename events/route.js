@@ -8,7 +8,7 @@ const Comment = require("../models/comment.model");
 const Discord = require('discord.js');
 
 const discordConfig = {
-  token: process.env.TOKEN,
+  token: process.env.BOTTOKEN,
   clientId: '882161977009512448',
   guildId: '1141793551403978803',
   channelId: '1285234436560130151'
