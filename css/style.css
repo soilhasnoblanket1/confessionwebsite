@@ -13,6 +13,10 @@
     --footer-height: 60px;
 }
 
+.hidden {
+  display: none;
+}
+
 html {
     scroll-behavior: smooth;
 }
