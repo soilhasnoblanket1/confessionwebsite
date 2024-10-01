@@ -270,13 +270,14 @@ app.post('/postimg/image', upload.single('image'), async (req, res) => {
     if (!file.path || !file.originalname) {
       throw new Error('Invalid file uploaded');
     }
+    const caption = req.body.caption; // Get the caption from the request body
     try {
       const buffer = await sharp(file.path).toBuffer();
       const messagePayload = {
         embeds: [
           {
             title: 'Image uploaded successfully!',
-            description: 'fuck u saurav',
+            description: caption, // Use the caption here
             image: {
               url: 'attachment://' + file.originalname
             }
@@ -326,13 +327,20 @@ app.get('/images', (req, res) => {
       // Fetch images from attachments and embeds
       if (message.attachments.size > 0) {
         message.attachments.forEach(attachment => {
-          images.push({ url: attachment.url, message });
+          const embed = message.embeds.find(embed => embed.image && embed.image.url.startsWith('attachment://'));
+          console.log('Embed:', embed);
+          const caption = embed ? embed.description : message.content;
+          console.log('Caption:', caption);
+          images.push({ url: attachment.url, caption, message });
         });
       }
       if (message.embeds.length > 0) {
         message.embeds.forEach(embed => {
-          if (embed.image) {
-            images.push({ url: embed.image.url, message });
+          if (embed.image && embed.image.url.startsWith('attachment://')) {
+            console.log('Embed:', embed);
+            const caption = embed.description ? embed.description : message.content;
+            console.log('Caption:', caption);
+            images.push({ url: embed.image.url.replace('attachment://', ''), caption, message });
           }
         });
       }
@@ -343,7 +351,7 @@ app.get('/images', (req, res) => {
       return reaction && reaction.count > 0;
     });
 
-    res.render('images', { images: reactedImages.map(image => image.url) });
+    res.render('images', { images: reactedImages });
   });
 });
 
