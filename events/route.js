@@ -327,20 +327,13 @@ app.get('/images', (req, res) => {
       // Fetch images from attachments and embeds
       if (message.attachments.size > 0) {
         message.attachments.forEach(attachment => {
-          const embed = message.embeds.find(embed => embed.image && embed.image.url.startsWith('attachment://'));
-          console.log('Embed:', embed);
-          const caption = embed ? embed.description : message.content;
-          console.log('Caption:', caption);
-          images.push({ url: attachment.url, caption, message });
+          images.push({ url: attachment.url, message });
         });
       }
       if (message.embeds.length > 0) {
         message.embeds.forEach(embed => {
-          if (embed.image && embed.image.url.startsWith('attachment://')) {
-            console.log('Embed:', embed);
-            const caption = embed.description ? embed.description : message.content;
-            console.log('Caption:', caption);
-            images.push({ url: embed.image.url.replace('attachment://', ''), caption, message });
+          if (embed.image) {
+            images.push({ url: embed.image.url, message });
           }
         });
       }
@@ -351,7 +344,7 @@ app.get('/images', (req, res) => {
       return reaction && reaction.count > 0;
     });
 
-    res.render('images', { images: reactedImages });
+    res.render('images', { images: reactedImages.map(image => image.url) });
   });
 });
 
