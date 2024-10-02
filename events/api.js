@@ -47,7 +47,7 @@ async function rateLimitMiddleware(req, res, next) {
         const pastHourDocs = await RateLimit.find({ ip: ipAddress, timestamp: { $gte: currentTime - 3600000 } });
         if (pastHourDocs.length >= 3) {
           console.log(`Rate limit exceeded for IP ${ipAddress} in the past hour. Redirecting to /static/err401`);
-          return res.redirect("/static/vpnblock");
+          return res.redirect("/static/err401");
         } else {
           doc.count = 0;
           doc.timestamp = currentTime;
