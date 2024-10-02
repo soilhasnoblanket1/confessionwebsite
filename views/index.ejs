@@ -13,22 +13,22 @@
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style></style>
 </head>
 
 <body>
-
   <!-- Navigation Bar -->
   <section>
     <header class="header">
       <div id="menu-btn" class="fas fa-bars"></div>
       <a href="/" class="logo nav-item" id="logo">
-        <img src="/assets/1.png" width="50px" height="50px" />Celestial Revelation</a>
+        <img src="/assets/1.png" width="50px" height="50px" /><span class="hover-2">Celestial Revelation</span></a>
       <nav class="navbar" id="navbar">
         <a href="/" class="nav-item">Home</a>
         <a href="/feed" class="nav-item">Confessions</a>
         <a href="/images" class="nav-item">Images</a>
         <a href="/deleteconfession" class="nav-item">Delete Confession</a>
-        <button id="style-toggle" aria-label="Toggle stylesheet">Toggle Style</button>
+        <button class='glowing-btn' id="style-toggle"><span class='glowing-txt'>M<span class='faulty-letter'>A</span>GIC</span></button>
       </nav>
     </header>
 
@@ -50,31 +50,33 @@
       <script src="/theme.js"></script>
   </section>
 
-  <!-- Body -->
-  <div class="main-cnt">
-    <br><br>
-    <section>
-      <div class="container text-center container-index">
-        <form action="/api/submit" method="post" class="m-3 p-3">
-          <h1 style="font-family: 'Press Start 2P', cursive; font-size: 20px;">Submit Your Confession</h1>
-          <textarea class="confession-box" id="confession" name="confession"
-            placeholder="Send us anonymous confessions..." maxlength="500" oninput="updateCharacterCount()"
-            required></textarea>
-          <div id="characterCount">
-            <p>Characters remaining: 500</p>
-          </div>
-          <div>
-            <input class="index-cb" type="checkbox" id="terms" name="terms" required checked>
-            <label for="terms">I have read and agree to the <u><a href="/static/tos" target="_blank">terms and
+ <!-- Body -->
+<div class="scotch-container">
+  <br><br>
+  <section>
+    <div class="container text-center container-index">
+      <form action="/api/submit" method="post" class="m-3 p-3">
+        <h1 style="font-family: 'Press Start 2P', cursive; font-size: 20px;">Submit Your Confession</h1>
+        <textarea class="confession-box" id="confession" name="confession"
+          placeholder="Send us anonymous confessions..." maxlength="500" oninput="updateCharacterCount()"
+          required></textarea>
+        <div id="characterCount">
+          <p>Characters remaining: 500</p>
+        </div>
+        <div>
+          <input class="index-cb" type="checkbox" id="terms" name="terms" required checked>
+          <label for="terms">I have read and agree to the <u><a href="/static/tos" target="_blank">terms and
                   services</a></u></label>
-          </div>
-          <div class="g-recaptcha" data-sitekey="6Lctj88pAAAAAERQIw9_Ff7WY2NwCTda5UZEVfCv"
-            style="display: flex; justify-content: center;"></div>
-          <button class="button" type="submit" id="submit-btn">
-            Submit
-          </button>
-        </form>
-      </div><br>
+        </div>
+        <div class="g-recaptcha" data-sitekey="6Lctj88pAAAAAERQIw9_Ff7WY2NwCTda5UZEVfCv"
+          style="display: flex; justify-content: center;"></div>
+        <button class="button hover-btn" type="submit" id="submit-btn">
+          <span>Submit</span>
+          <span class="emoji">🚀</span>
+        </button>
+      </form>
+    </div><br>
+
       <!-- Last 3 Confessions -->
       <div class="container text-center container-last" style="font-family: 'Raleway', sans-serif; font-weight: 780;">
         <h1 style="font-family: 'Press Start 2P', cursive; font-size: 20px;">Latest Confessions</h1>

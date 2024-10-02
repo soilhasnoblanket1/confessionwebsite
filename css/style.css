@@ -11,10 +11,7 @@
     --footer-hover-color: #000000;
     --footer-padding: 1rem;
     --footer-height: 60px;
-}
-
-.hidden {
-  display: none;
+    --glow-color: hsl(0, 0%, 0%);
 }
 
 html {
@@ -68,7 +65,41 @@ a {
     font-size: 1.5rem;
     text-decoration: none;
     color: #000000;
-}
+    padding: 0 .5em .25em;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: .3s;
+  }
+  
+  .header .navbar a:hover {
+    color: #4d026b;
+  }
+  
+  .header .navbar a:before {
+    content: "";
+    position: absolute;
+    inset: calc(100% - 3px) 0 0 0; /* 3px = the thickness */
+    background: #6c0694; /* the color */
+    scale: 0 1;
+    transition: .3s, translate 0s .3s;
+  }
+  
+  .header .navbar a:hover:before {
+    scale: 1;
+    translate: 0;
+    transition: .3s;
+  }
+  
+  .header .navbar a:has(~ a:hover):before {
+    translate: 100% 0;
+    transition: .2s .2s,scale 0s .4s;
+  }
+  
+  .header .navbar a:hover ~ a:before {
+    translate: -100% 0;
+    transition: .2s .2s,scale 0s .4s;
+  }
 
 #menu-btn {
     font-size: 3rem;
@@ -119,6 +150,223 @@ a {
 
 
 /* Index */
+
+.hover-2 {
+    --c: #4f0458; /* the color */
+    --s: .15em;
+    
+    line-height:1.1em;
+    padding-bottom: calc(2.1*var(--s));
+    background: 
+      conic-gradient(from 135deg at top,var(--c) 90deg,#0000 0) 
+        left 0 bottom var(--s)/calc(2*var(--s)) var(--s) repeat-x,
+      conic-gradient(from -45deg at bottom,var(--c) 90deg,#0000 0) 
+        left var(--s) bottom 0/calc(2*var(--s)) var(--s) repeat-x;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0) 0/var(--_p,0%) padding-box no-repeat;
+    transition: .5s;
+  }
+  .hover-2:hover {
+    --_p: 100%;
+    color: var(--c);
+  }
+  
+  .hover-2 img {
+    margin-right: 10px;
+  }
+
+  .glowing-btn {
+    position: relative;
+    color: var(--glow-color);
+    cursor: pointer;
+    padding: 0.1em 1em;
+    border: 0.15em solid var(--glow-color);
+    border-radius: 0.45em;
+    background: none;
+    perspective: 2em;
+    font-family: "Raleway", sans-serif;
+    font-size: 1em;
+    font-weight: 500;
+    letter-spacing: 1em;
+  
+    -webkit-box-shadow: inset 0px 0px 0.5em 0px var(--glow-color),
+      0px 0px 0.5em 0px var(--glow-color);
+    -moz-box-shadow: inset 0px 0px 0.5em 0px var(--glow-color),
+      0px 0px 0.5em 0px var(--glow-color);
+    box-shadow: inset 0px 0px 0.5em 0px var(--glow-color),
+      0px 0px 0.5em 0px var(--glow-color);
+    animation: border-flicker 2s linear infinite;
+  }
+  
+  .glowing-txt {
+    float: left;
+    margin-right: -0.8em;
+    -webkit-text-shadow: 0 0 0.125em hsl(0 0% 100% / 0.3),
+      0 0 0.45em var(--glow-color);
+    -moz-text-shadow: 0 0 0.125em hsl(0 0% 100% / 0.3),
+      0 0 0.45em var(--glow-color);
+    text-shadow: 0 0 0.125em hsl(0 0% 100% / 0.3), 0 0 0.45em var(--glow-color);
+    animation: text-flicker 3s linear infinite;
+  }
+  
+  .faulty-letter {
+    opacity: 0.5;
+    animation: faulty-flicker 2s linear infinite;
+  }
+  
+  .glowing-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0.7;
+    filter: blur(1em);
+    transform: translateY(120%) rotateX(95deg) scale(1, 0.35);
+    background: var(--glow-color);
+    pointer-events: none;
+  }
+  
+  .glowing-btn::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    z-index: -1;
+    background-color: var(--glow-color);
+    box-shadow: 0 0 2em 0.2em var(--glow-color);
+    transition: opacity 100ms linear;
+  }
+  
+  .glowing-btn:hover {
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: none;
+    animation: none;
+  }
+  
+  .glowing-btn:hover .glowing-txt {
+    animation: none;
+  }
+  
+  .glowing-btn:hover .faulty-letter {
+    animation: none;
+    text-shadow: none;
+    opacity: 1;
+  }
+  
+  .glowing-btn:hover:before {
+    filter: blur(1.5em);
+    opacity: 1;
+  }
+  
+  .glowing-btn:hover:after {
+    opacity: 1;
+  }
+  
+  @keyframes faulty-flicker {
+    0% {
+      opacity: 0.1;
+    }
+    2% {
+      opacity: 0.1;
+    }
+    4% {
+      opacity: 0.5;
+    }
+    19% {
+      opacity: 0.5;
+    }
+    21% {
+      opacity: 0.1;
+    }
+    23% {
+      opacity: 1;
+    }
+    80% {
+      opacity: 0.5;
+    }
+    83% {
+      opacity: 0.4;
+    }
+  
+    87% {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes text-flicker {
+    0% {
+      opacity: 0.1;
+    }
+  
+    2% {
+      opacity: 1;
+    }
+  
+    8% {
+      opacity: 0.1;
+    }
+  
+    9% {
+      opacity: 1;
+    }
+  
+    12% {
+      opacity: 0.1;
+    }
+    20% {
+      opacity: 1;
+    }
+    25% {
+      opacity: 0.3;
+    }
+    30% {
+      opacity: 1;
+    }
+  
+    70% {
+      opacity: 0.7;
+    }
+    72% {
+      opacity: 0.2;
+    }
+  
+    77% {
+      opacity: 0.9;
+    }
+    100% {
+      opacity: 0.9;
+    }
+  }
+  
+  @keyframes border-flicker {
+    0% {
+      opacity: 0.1;
+    }
+    2% {
+      opacity: 1;
+    }
+    4% {
+      opacity: 0.1;
+    }
+  
+    8% {
+      opacity: 1;
+    }
+    70% {
+      opacity: 0.7;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+
 .confession-box {
     resize: vertical;
     padding: 15px;
@@ -233,39 +481,74 @@ a {
     position: relative;
     overflow: hidden;
 }
-
-.button::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3));
-    border-radius: 10px;
-    z-index: -1;
+.button:hover {
+    background: rgba(93, 63, 211, 0.7);
 }
 
+.noselect {
+    -webkit-touch-callout: none;
+      -webkit-user-select: none;
+       -khtml-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
+          -webkit-tap-highlight-color: transparent;
+  }
 
-.button1 {
-    font-size: large;
-    height: 50px;
-    width: 20rem;
-    color: #FFFFFF;
-    background: rgba(255, 0, 0, 0.7);
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+  .button1 {
+	width: 150px;
+	height: 50px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	border: none;
+	border-radius: 5px;
+	box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+	background: #610f5d;
+}
+
+.button1, .button1 span {
+	transition: 200ms;
+}
+
+.button1 .text {
+	transform: translateX(35px);
+	color: white;
+	font-weight: bold;
+}
+
+.button1 .icon {
+	position: absolute;
+	border-left: 1px solid #c41b1b;
+	transform: translateX(110px);
+	height: 40px;
+	width: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.button1 svg {
+	width: 15px;
+	fill: #eee;
 }
 
 .button1:hover {
-    background: rgba(159, 9, 9, 0.7);
+	background: #53074d;
 }
 
-.button:hover {
-    background: rgba(93, 63, 211, 0.7);
+.button1:hover .text {
+	color: transparent;
+}
+
+.button1:hover .icon {
+	width: 150px;
+	border-left: none;
+	transform: translateX(0);
+}
+
+.button1:focus {
+	outline: none;
 }
 
 #playsound {
@@ -309,9 +592,11 @@ a {
     font-family: 'Montserrat', sans-serif;
     font-weight: 900;
 }
+
 .confession-card p {
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
 }
+
 .feed-container h1 {
     text-align: center;
     font-size: 4rem;
@@ -395,9 +680,9 @@ a {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     width: 80%;
     text-align: center;
-  }
-  
-  .submission-oc {
+}
+
+.submission-oc {
     font-family: "Courier New", Courier, monospace;
     font-size: 14px;
     color: white;
@@ -405,9 +690,9 @@ a {
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
-  }
-  
-  .submission-cb {
+}
+
+.submission-cb {
     background-color: rgba(224, 224, 224, 0.5);
     padding: 10px;
     margin-top: 10px;
@@ -415,7 +700,7 @@ a {
     overflow-wrap: break-word;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
     font-size: 14px;
-  }
+}
 
 
 /** Delete **/
@@ -537,6 +822,7 @@ a {
     .search-box {
         height: 4rem;
     }
+
 
     .submission-container h3 {
         font-size: 2.2rem;

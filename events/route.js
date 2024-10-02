@@ -14,6 +14,7 @@ const discordConfig = {
   channelId: '1285234436560130151'
 };
 
+
 const client = new Discord.Client({
     intents: [
       Discord.GatewayIntentBits.Guilds,
