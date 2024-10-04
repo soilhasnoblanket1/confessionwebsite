@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const Confession = mongoose.model("Confession", {
+const confessionSchema = new mongoose.Schema({
   confession: {
     type: String,
     required: true,
@@ -10,9 +10,13 @@ const Confession = mongoose.model("Confession", {
     default: Date.now,
   },
   ip: {
-  type: String,
+    type: String,
     required: true,
+  },
+  redeemed: {
+    type: Boolean,
+    default: false,
   },
 });
 
-module.exports = Confession;
+module.exports = mongoose.model('Confession', confessionSchema);
