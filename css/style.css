@@ -593,6 +593,12 @@ a {
     font-weight: 900;
 }
 
+.short-confession {
+  max-width: 50%;
+  overflow: hidden;
+  display: inline-block;
+}
+
 .confession-card p {
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
 }
@@ -980,8 +986,12 @@ a {
   color: #333;
 }
 
-.comment-bubble .text {
-  color: #666;
+.text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
 }
 
 input[type="text"] {
@@ -1024,4 +1034,50 @@ input[type="text"]::placeholder {
 
 .text {
     margin-bottom: 10px;
+}
+
+
+.glassmorphic-container {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  margin-bottom: 20px;
+}
+
+.glassmorphic-text {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 18px;
+  color: #fff;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 1px;
+  line-height: 1.8;
+  padding: 15px;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.glassmorphic-link {
+  text-decoration: none;
+  color: #150036;
+  transition: color 0.2s ease;
+}
+
+.comment-section-container {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.glassmorphic-link:hover {
+  color: #fff;
+}
+
+.highlight {
+  color: #66d9ef;
+  font-weight: bold;
 }

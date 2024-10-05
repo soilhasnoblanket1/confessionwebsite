@@ -29,11 +29,12 @@
 <!-- Confession Card -->
 <br> <br>
 <section>
-  <div class="confession-card">
+  <div class="confession-card" style="max-height: 150px; overflow: hidden;">
     <p><%= confession.confession %></p> 
     <br>
     <p class="feed-ct"><%= formatTimeDifference(confession.createdAt) %></p>
   </div>
+  <div class="glassmorphic-container comment-section-container">
     <div class="comment-section">
       <h5><%= comments.length %> Comments</h5>
       <% if (comments.length > 0) { %>
@@ -55,20 +56,26 @@
                   <% } else { %>
                     <span class="username">Anonymous user</span>
                   <% } %>
-                  <p class="text"><%= comment.text %></p> <!-- display the comment text -->
+                  <p class="text"><%= comment.text %></p>
+                  <p class="feed-ct"><%= formatTimeDifference(comment.createdAt) %></p>
                 </div>
-                <p class="feed-ct"><%= formatTimeDifference(comment.createdAt) %></p>
             </li>
           <% }); %>
         </ul>
       <% } else { %>
         <p>No comments yet.</p>
       <% } %>
-      <p>Want to link your comment with your Discord avatar? <a href="https://discord.gg/uSzPmnSy">Join our Discord server</a> and get verified to show off your Discord avatara and username</p>
+      <div class="glassmorphic-container">
+        <p class="glassmorphic-text">
+          Want to link your comment with your Discord avatar? 
+          <a href="https://discord.gg/uSzPmnSy" class="glassmorphic-link">Join our Discord server</a> 
+          and get verified to show off your <span class="highlight">Discord avatar</span> and <span class="highlight">username</span>!
+        </p>
+      </div>
       <form action="/post/<%= confession._id %>" method="post">
         <input type="text" name="text" placeholder="Add a comment...">
         <input type="text" name="linkCode" placeholder="Enter your link code (optional)">
-        <button type="submit">Post</button>
+        <button class="button hover-btn" type="submit">Post</button>
       </form>
     </div>
   </div>
