@@ -97,11 +97,33 @@
       </div>
   </div>
 
-  <!-- Easter egg from doil -->
-  <section>
-    <button id="playsound">💣Donot Click here💥</button>
-    <audio id="sound" src="/assets/americaya.mp3"></audio>
-  </section>
+<!-- Easter egg from doil -->
+<section>
+  <button id="playsound">💣Donot Click here💥</button>
+  <audio id="sound" src="/assets/americaya.mp3"></audio>
+  <video id="video" style="position: absolute; top: 0; left: 0; width: 100%; height: 100vh; z-index: 1000; display: none;">
+    <source src="/assets/1005.mp4" type="video/mp4">
+  </video>
+  <script>
+    const playButton = document.getElementById('playsound');
+    const soundEffect = document.getElementById('sound');
+    const video = document.getElementById('video');
+
+    playButton.addEventListener('click', () => {
+      if (window.matchMedia('(max-width: 768px)').matches) {
+        // Play audio on mobile devices
+        soundEffect.play();
+      } else {
+        // Play video on desktop devices
+        video.style.display = 'block';
+        video.play();
+        video.addEventListener('ended', () => {
+          video.style.display = 'none';
+        });
+      }
+    });
+  </script>
+</section>
 
   <!-- Footer -->
   <div class="spaace"></div>
@@ -132,11 +154,6 @@
       const remaining = maxLength - textArea.value.length;
       document.getElementById('characterCount').textContent = `Characters remaining: ${remaining}`;
     }
-    const playButton = document.getElementById('playsound');
-    const soundEffect = document.getElementById('sound');
-    playButton.addEventListener('click', () => {
-      soundEffect.play();
-    });
   </script>
 </body>
 

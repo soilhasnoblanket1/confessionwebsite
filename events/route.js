@@ -26,7 +26,6 @@ const client = new Discord.Client({
     ]
   });
 
-client.login(discordConfig.token);
 
 const multer = require('multer');
 
