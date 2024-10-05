@@ -5,7 +5,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 const crypto = require("crypto");
 const axios = require('axios');
-
+const Coin = require('../models/coin.js');
 const Confession = require("../models/confession.js");
 const RateLimit = require("../models/limit.js");
 const https = require("https");
@@ -21,29 +21,23 @@ async function rateLimitMiddleware(req, res, next) {
     if (vpnData.security.vpn === true) {
       req.vpnDetected = true; // Set the req.vpnDetected property to true
       return res.redirect('/static/vpnblock');
-      console.log(`VPN detected for IP ${ipAddress}`);
     } else {
       req.vpnDetected = false; 
     }
-
-    // Find the RateLimit document for the IP address
     const doc = await RateLimit.findOne({ ip: ipAddress }).exec();
 
     console.log(`Rate limit check for IP ${ipAddress}:`);
 
     if (!doc) {
-      // Create a new RateLimit document if one doesn't exist
       const newDoc = new RateLimit({ ip: ipAddress, count: 0, timestamp: Date.now() });
       await newDoc.save();
       console.log(`Created new RateLimit document for IP ${ipAddress}`);
       return next();
     } else {
-      // Update the RateLimit document
       const currentTime = Date.now();
       const timeDifference = currentTime - doc.timestamp;
 
-      if (timeDifference >= 3600000) { // 1 hour in milliseconds
-        // Check if the IP address has exceeded the rate limit in the past hour
+      if (timeDifference >= 3600000) { 
         const pastHourDocs = await RateLimit.find({ ip: ipAddress, timestamp: { $gte: currentTime - 3600000 } });
         if (pastHourDocs.length >= 3) {
           console.log(`Rate limit exceeded for IP ${ipAddress} in the past hour. Redirecting to /static/err401`);
@@ -190,26 +184,133 @@ app.get('/rate-limit', async (req, res) => {
   }
 });
 
-app.post("/deleteconf", (req, res) => {
-  const encryptedConfessionId = req.body.objectId; // Get the encrypted confession ID from the request body
+app.post("/deleteconf", async (req, res) => {
+  try {
+    const encryptedConfessionId = req.body.objectId; // Get the encrypted confession ID from the request body
 
-  // Decrypt the confession ID
-  const confessionId = decryptConfessionCode(encryptedConfessionId);
+    // Decrypt the confession ID
+    const confessionId = decryptConfessionCode(encryptedConfessionId);
 
-  // Log the confessionId value
-  console.log("Confession ID:", confessionId);
+    // Log the confessionId value
+    console.log("Confession ID:", confessionId);
 
-  // Find and delete the confession by ID
-  Confession.findByIdAndDelete(confessionId)
-  .then(() => {
+    // Start a database transaction
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+      // Find the confession in the Confession collection
+      const confession = await Confession.findById(confessionId);
+
+      if (!confession) {
+        console.error("Confession not found");
+        res.redirect("/static/err400");
+        return;
+      }
+
+      if (confession.redeemed) {
+        const redeemerId = confession.redeemerId;
+        const coin = await Coin.findOne({ userId: redeemerId });
+
+        if (coin) {
+          coin.coins -= 50;
+          await coin.save();
+        }
+      } else {
+        // Find the user's coin balance
+        const userCoin = await Coin.findOne({ userId: confession.redeemerId });
+
+        if (userCoin) {
+          userCoin.coins -= 50;
+          await userCoin.save();
+        }
+      }
+
+      // Delete the confession
+      await Confession.findByIdAndDelete(confessionId);
+
+      // Commit the transaction
+      await session.commitTransaction();
+      session.endSession();
+
       res.redirect("/static/deleted");
-    })
-  .catch((err) => {
-      console.error(err);
+    } catch (error) {
+      // Abort the transaction if an error occurs
+      await session.abortTransaction();
+      session.endSession();
+
+      console.error(error);
       res.redirect("/static/err400");
-    });
+    }
+  } catch (error) {
+    console.error(error);
+    res.redirect("/static/err400");
+  }
 });
-//...
+
+app.post("/delete/:id", async (req, res) => {
+  try {
+    const confessionId = req.params.id;
+
+    // Find the confession in the Confession collection
+    Confession.findById(confessionId)
+    .then((confession) => {
+      if (confession.redeemed) {
+        const redeemerId = confession.redeemerId;
+        Coin.findOne({ userId: redeemerId })
+        .then((coin) => {
+          if (coin) {
+            coin.coins -= 50;
+            coin.save()
+            .then(() => {
+              Confession.findByIdAndDelete(confessionId)
+              .then(() => {
+                res.redirect("/bin/cementglazeddoughnuts/adminpanel");
+              })
+              .catch((err) => {
+                console.error(err);
+                res.status(500).json({ message: "Server Error" });
+              });
+            })
+            .catch((err) => {
+              console.error(err);
+              res.status(500).json({ message: "Server Error" });
+            });
+          } else {
+            Confession.findByIdAndDelete(confessionId)
+            .then(() => {
+              res.redirect("/bin/cementglazeddoughnuts/adminpanel");
+            })
+            .catch((err) => {
+              console.error(err);
+              res.status(500).json({ message: "Server Error" });
+            });
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          res.status(500).json({ message: "Server Error" });
+        });
+      } else {
+        Confession.findByIdAndDelete(confessionId)
+        .then(() => {
+          res.redirect("/bin/cementglazeddoughnuts/adminpanel");
+        })
+        .catch((err) => {
+          console.error(err);
+          res.status(500).json({ message: "Server Error" });
+        });
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ message: "Server Error" });
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
 
 function decryptConfessionCode(encrypted) {
   const password = 'hey';
@@ -223,22 +324,4 @@ function decryptConfessionCode(encrypted) {
   decrypted += decipher.final('utf8');
   return decrypted;
 }
-
-app.post("/delete/:id", async (req, res) => {
-  try {
-    const confessionId = req.params.id;
-
-    // Find the confession in the Confession collection and delete it
-    const confession = await Confession.findByIdAndDelete(confessionId);
-
-    if (!confession) {
-      return res.status(404).json({ message: "Confession not found" });
-    }
-
-    res.redirect("/bin/cementglazeddoughnuts/adminpanel");
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server Error" });
-  }
-});
 module.exports = app;

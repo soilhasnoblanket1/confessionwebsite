@@ -27,7 +27,7 @@
     </header>
   </section>
 
-  <!-- Confession Card -->
+<!-- Confession Card -->
 <br> <br>
 <section>
   <div class="confession-card">
@@ -43,10 +43,19 @@
             <li>
               <div class="comment">
                 <div class="avatar">
-                  <img src="https://i.insider.com/64a325b16075be0019c28e16?width=1136&format=jpeg" alt="Avatar" class="avatar-img">
+                  <% if (comment.linkCodeVerified) { %>
+                    <img src="<%= comment.avatar %>" alt="Avatar" class="avatar-img">
+                  <% } else { %>
+                    <img src="https://i.insider.com/64a325b16075be0019c28e16?width=1136&format=jpeg" alt="Avatar" class="avatar-img">
+                  <% } %>
                 </div>
                 <div class="comment-bubble">
-                  <span class="username">Anonymous user</span>
+                  <% if (comment.linkCodeVerified) { %>
+                    <span class="username">@<%= comment.username %></span>
+                    <img src="https://cdn-icons-png.flaticon.com/128/5968/5968756.png" width="15px" height="15px" style="margin-left: 5px;">
+                  <% } else { %>
+                    <span class="username">Anonymous user</span>
+                  <% } %>
                   <p class="text"><%= comment.text %></p> <!-- display the comment text -->
                 </div>
                 <p class="feed-ct"><%= formatTimeDifference(comment.createdAt) %></p>
@@ -58,6 +67,7 @@
       <% } %>
       <form action="/post/<%= confession._id %>" method="post">
         <input type="text" name="text" placeholder="Add a comment...">
+        <input type="text" name="linkCode" placeholder="Enter your link code (optional)">
         <button type="submit">Post</button>
       </form>
     </div>

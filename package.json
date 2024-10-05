@@ -25,7 +25,7 @@
   },
   "scripts": {
     "build": "npm install ejs express body-parser path mongoose discord.js multer sharp axios",
-    "start": "node app.js"
+    "start": "node app.js && d.js"
   },
   "devDependencies": {
     "postcss": "^8.4.47",

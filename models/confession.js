@@ -1,18 +1,24 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const Confession = mongoose.model("Confession", {
+const confessionSchema = new mongoose.Schema({
   confession: {
     type: String,
-    required: true,
   },
   createdAt: {
     type: Date,
     default: Date.now,
   },
   ip: {
-  type: String,
-    required: true,
+    type: String,
+  },
+  redeemerId: {
+    type: String,
+    default: null,
+  },
+  redeemed: {
+    type: Boolean,
+    default: false,
   },
 });
 
-module.exports = Confession;
+module.exports = mongoose.model('Confession', confessionSchema);

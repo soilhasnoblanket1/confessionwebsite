@@ -957,25 +957,50 @@ a {
 }
 
 .comment-bubble {
-    background-color: #f2f3f5;
-    border-radius: 10px;
-    padding: 10px;
-    position: relative;
+  background: linear-gradient(145deg, #cacaca, #f0f0f0);
+  box-shadow:  20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
+  border-radius: 10px;
+  padding: 10px;
+  position: relative;
 }
 
 .comment-bubble::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: -10px;
-    border-width: 10px 10px 0 0;
-    border-style: solid;
-    border-color: #f2f3f5 transparent transparent transparent;
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -10px;
+  border-width: 10px 10px 0 0;
+  border-style: solid;
+  border-color: #cacaca transparent transparent transparent;
 }
 
 .username {
-    font-weight: bold;
-    margin-right: 10px;
+  font-weight: bold;
+  margin-right: 10px;
+  color: #333;
+}
+
+.comment-bubble .text {
+  color: #666;
+}
+
+input[type="text"] {
+  background: linear-gradient(145deg, #cacaca, #f0f0f0);
+  box-shadow:  20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
+  border-radius: 10px;
+  padding: 10px;
+  border: none;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  box-shadow:  20px 20px 60px #bebebe, -20px -20px 60px #ffffff, 0px 0px 10px #cacaca;
+}
+
+input[type="text"]::placeholder {
+  color: #666;
 }
 
 .text {

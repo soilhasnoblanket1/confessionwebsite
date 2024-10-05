@@ -5,6 +5,8 @@ const app = express();
 const Confession = require("../models/confession.js");
 const path = require("path");
 const Comment = require("../models/comment.model");
+const Coin = require('../models/coin.js');
+const Link = require('../models/link.js');
 const Discord = require('discord.js');
 
 const discordConfig = {
@@ -65,8 +67,14 @@ app.get("/static/vpnblock", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "error", "vpnblock.html"));
 });
 
-app.get("/fortune", (req, res) => {
-  res.render("fortune");
+app.get('/leaderboard', async (req, res) => {
+  const leaderboard = await Coin
+    .find()
+    .sort({ coins: -1 })
+    .limit(5)
+    .exec();
+
+  res.render('fortune', { leaderboard });
 });
 
 app.get("/static/imgfetch", (req, res) => {
@@ -210,10 +218,37 @@ app.post("/post/:id", async (req, res) => {
       return res.status(400).json({ error: "Text is required" });
     }
 
-    const comment = new Comment({
-      text: req.body.text,
-      confession: confessionId,
-    });
+    const linkCode = req.body.linkCode;
+    let comment;
+
+    if (linkCode) {
+      const link = await Link.findOne({ linkCode });
+      if (link) {
+        // Link code is valid, use the user's avatar and username
+        comment = new Comment({
+          text: req.body.text,
+          confession: confessionId,
+          linkCodeVerified: true,
+          avatar: link.avatar,
+          username: link.username
+        });
+      } else {
+        // Link code is invalid, use anonymous user and basic profile
+        comment = new Comment({
+          text: req.body.text,
+          confession: confessionId,
+          linkCodeVerified: false
+        });
+      }
+    } else {
+      // No link code provided, use anonymous user and basic profile
+      comment = new Comment({
+        text: req.body.text,
+        confession: confessionId,
+        linkCodeVerified: false
+      });
+    }
+
     await comment.save();
     res.redirect('back');
   } catch (err) {
