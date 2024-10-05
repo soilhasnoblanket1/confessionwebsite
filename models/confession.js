@@ -18,7 +18,11 @@ const confessionSchema = new mongoose.Schema({
   redeemed: {
     type: Boolean,
     default: false,
+    required: true,
+  },
+  redeemed: {
+    type: Boolean,
+    default: false,
   },
 });
-
 module.exports = mongoose.model('Confession', confessionSchema);
