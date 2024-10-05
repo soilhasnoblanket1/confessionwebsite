@@ -26,7 +26,6 @@
       </nav>
     </header>
   </section>
-
 <!-- Confession Card -->
 <br> <br>
 <section>
@@ -65,6 +64,7 @@
       <% } else { %>
         <p>No comments yet.</p>
       <% } %>
+      <p>Want to link your comment with your Discord avatar? <a href="https://discord.gg/uSzPmnSy">Join our Discord server</a> and get verified to show off your Discord avatara and username</p>
       <form action="/post/<%= confession._id %>" method="post">
         <input type="text" name="text" placeholder="Add a comment...">
         <input type="text" name="linkCode" placeholder="Enter your link code (optional)">
@@ -73,7 +73,6 @@
     </div>
   </div>
 </section>
-
   <!-- Footer -->
   <section>
     <div class="footer">
